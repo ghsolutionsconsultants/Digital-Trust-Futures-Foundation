@@ -1,136 +1,125 @@
 # Digital Trust Futures Foundation — website
 
-Static website for **Digital Trust Futures Foundation NPC**, built from the Foundation's
-own source documents (the comprehensive organisation profile, the positioning and strategy
-document, the August 2026 organisational profile, and the website creation guide).
+React application for **Digital Trust Futures Foundation NPC**, built with Vite and TypeScript.
 
-**Safe infrastructure. Trusted technology. Inclusive digital futures.**
+**Protecting people, their rights and the digital systems they depend on.**
 
 ---
 
 ## What's here
 
 ```
-website/            ← the finished site. This is what you deploy.
-_src/               ← the generator that produced it (Python, no dependencies)
-_src/tests/         ← browser-based interaction test harness
+react-app/          ← the application source (Vite + TypeScript + React 19)
+  ├── public/       ← static assets copied verbatim into the build
+  └── src/          ← components, pages, data and hooks
+website/            ← build output. Deployed by GitHub Actions; do not edit by hand.
+_src/               ← signature generator and the verification harness
+_src/retired/       ← the previous static generator, kept for reference only
 ```
 
-The site is **pure static HTML, CSS and vanilla JavaScript**. No framework, no build step
-required to serve it, no runtime dependencies, no third-party requests.
+Routing is client-side via `react-router-dom`, with `react-helmet-async` for per-route
+metadata. The original vanilla CSS design system is carried over unchanged.
 
-### Pages (23)
+### Routes (25)
 
-| Section | Pages |
+| Route | Page |
 | --- | --- |
-| Home | `index.html` |
-| About | `about.html`, `governance.html` |
-| What we do | `what-we-do.html` + 5 division pages in `divisions/` |
-| Programmes | `programmes.html` |
-| Research | `research.html`, `open-source.html` |
-| Engage | `get-involved.html`, `support-our-work.html` |
-| News & contact | `news.html`, `contact.html` |
-| Trust & legal | `security.html`, `credits.html`, `legal/` (privacy, cookies, terms, safeguarding) |
-| Error | `404.html` |
+| `/` | Home |
+| `/about` | About the Foundation |
+| `/human-rights` | Human Rights & Digital Trust |
+| `/governance` | Governance & Board |
+| `/what-we-do` | What We Do — five divisions |
+| `/divisions/:slug` | Individual division pages (×5) |
+| `/programmes` | Launch programmes |
+| `/research` | Research & resources library |
+| `/open-source` | Open-source projects |
+| `/civil-society` | Civil Society & Human Rights Defenders |
+| `/children-young-people` | Children & Young People |
+| `/get-involved` | Get involved |
+| `/support-our-work` | Support our work |
+| `/news` | News |
+| `/contact` | Contact |
+| `/security` | Vulnerability disclosure |
+| `/credits` | Credits |
+| `/thank-you` | Form confirmation |
+| `/legal/privacy` · `/legal/cookies` · `/legal/terms` · `/legal/safeguarding` | Legal |
 
-Plus `sitemap.xml`, `robots.txt`, `.well-known/security.txt`, `site.webmanifest`,
-`_headers` (security headers) and `_redirects`.
+Old `.html` URLs from the previous static site redirect to their modern equivalents
+(`LegacyHtmlRedirect` in `src/App.tsx`). This matters: the email signature already in
+circulation links to `/security.html` and `/legal/privacy.html`.
 
 ---
 
-## Deploying
+## Development
 
-Upload the contents of `website/` to any static host. It works on Netlify, Cloudflare
-Pages, GitHub Pages, S3 + CloudFront, or a plain Nginx/Apache vhost.
-
-```bash
-cd website && python3 -m http.server 8000
-```
-
-Then open <http://localhost:8000>.
-
-**Before go-live:**
-
-1. Point `SITE` in `_src/shell.py` at the production domain if it is not
-   `https://digitaltrustfuturesfoundation.org`, then rebuild.
-2. Netlify / Cloudflare Pages pick up `_headers` and `_redirects` automatically. On other
-   hosts, copy the header block from `_headers` into your server configuration — it carries
-   HSTS, a hash-based Content-Security-Policy, `X-Content-Type-Options`, a referrer policy
-   and `Permissions-Policy`.
-3. Set up the mailboxes the site routes to (see *Contact routing* below).
-4. Have legal counsel review and sign off the four policies in `legal/` — they are published
-   in draft and say so on the page.
-5. Confirm the registration number and registered address on `contact.html`.
-
-### Contact
-
-The site uses a single mailbox: **`info@digitaltrustfuturesfoundation.org`**. That is the only
-address that has to exist.
-
-Enquiry forms and division pages ask senders to name the topic in the subject line — the form on
-`get-involved.html` writes it for them (`Enquiry — Government / DPI programme`, and so on) so a
-single inbox can still be triaged to the right person.
-
----
-
-## Rebuilding
-
-Content lives in the `_src/page_*.py` files as data (lists of rows, cards, programmes) plus
-HTML fragments. The shared shell — `<head>`, header, navigation, footer — lives in
-`_src/shell.py`, so a nav or footer change is made once.
+Requires Node.js ≥ 18.
 
 ```bash
-python3 _src/build.py
+cd react-app && npm install && npm run dev
 ```
 
-Requires Python 3.8+. Nothing else.
+Then open <http://localhost:5173>.
 
-| File | Holds |
-| --- | --- |
-| `_src/shell.py` | head, header, nav model, footer, icons, shared components |
-| `_src/build.py` | page manifest, titles, meta descriptions, sitemap, headers |
-| `_src/page_home.py` | home page, protection gaps, division cards, audiences |
-| `_src/page_about.py` | about, values, theory of change, governance, IP, risk register |
-| `_src/page_divisions.py` | division data and the five division pages |
-| `_src/page_programmes.py` | launch programmes, flagship, fellowships, resource library |
-| `_src/page_engage.py` | open source, get involved, enquiry routing |
-| `_src/page_support.py` | funder investment case, funding model, news |
-| `_src/page_misc.py` | contact, security policy, credits, legal, 404 |
+## Building
 
-Adding a resource to the library, for example, means adding one tuple to `RESOURCES` in
-`_src/page_programmes.py` and rebuilding. Status labels (`planned`, `development`, `live`)
-drive the badge shown against each record.
+```bash
+cd react-app && npm run build
+```
+
+Runs `tsc`, then Vite, then `scripts/postbuild.mjs`, which:
+
+- writes **`404.html` as a copy of `index.html`** — GitHub Pages serves it for any path it
+  has no file for, which is what makes `/about` and the other routes resolve. Without it
+  every route except `/` is a hard 404.
+- generates **`sitemap.xml`** from the route list, so it cannot drift from the router.
+
+Output goes to `../website/`. `emptyOutDir` is on, so every build is reproducible —
+everything the deployed site needs (assets, fonts, `CNAME`, `_headers`, `robots.txt`,
+`.well-known/security.txt`, the signature pages) lives in `react-app/public/`.
+
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and publishes to
+GitHub Pages at **digitaltrustfuturesfoundation.org**. The workflow fails the build if
+`404.html` is not a copy of `index.html`, if `CNAME` is wrong, or if stale HTML appears in
+the output.
+
+**Before go-live**
+
+1. Send a live test through both forms and confirm `info@digitaltrustfuturesfoundation.org`
+   receives them. Forms post to Web3Forms; the redirect to `/thank-you` may require a paid
+   plan, in which case submitters see the Web3Forms success page instead.
+2. Have legal counsel review the four policies in `src/pages/legal/` — they are published in
+   draft and say so on the page.
+3. Confirm the registration number and registered address on the Contact page.
+4. Review the safeguarding policy against the August 2026 governance update (Head of Human
+   Rights, Safeguarding and Ethics; the Advisory Panel).
+5. **Security headers.** GitHub Pages does not read `_headers`, so the CSP, HSTS and related
+   headers are not currently served. Putting Cloudflare in front, or moving to Cloudflare
+   Pages or Netlify, applies them.
 
 ---
 
 ## Email signatures
 
-`python3 _src/signature.py` regenerates them into `website/signature/`. Adding a colleague is one
-entry in `PEOPLE`; a domain change is the single `BASE` constant.
+```bash
+python3 _src/signature.py
+```
 
-| Output | Use |
-| --- | --- |
-| `<slug>.html` | Install page — open it, click **Copy signature**, follow the per-client steps |
-| `<slug>-block-embedded.html` | Markup with images embedded as base64 |
-| `<slug>-block.html` | Markup with images loaded from the website |
-| `<slug>.txt` | Plain-text fallback |
-| `export/*.png` | Flat renders for decks, PDFs and letterheads |
+Writes into `react-app/public/signature/`, so the output is part of the build rather than
+something that survives alongside it. Adding a colleague is one entry in `PEOPLE`; a domain
+change is the single `BASE` constant.
 
-The install page embeds the photo and logo as base64, so it renders before the site is live. Pasting
-the rendered signature is the intended install path: Gmail re-uploads the images to its own servers
-and Outlook and Apple Mail attach them to the message, so the photo reaches recipients without
-depending on the website being up. Use `-block.html` instead only if you specifically want the images
-served from the site.
-
-Built as nested tables with inline styles and web-safe fonts, because Outlook for Windows drops
-flexbox, grid, gradients and web fonts. Every detail is real text rather than baked into an image, so
-recipients who block remote images still get the name, title, address and phone number.
+The install page embeds the photo and logo as base64, so it renders before the site is live.
+Pasting the rendered signature is the intended path: Gmail re-uploads the images to its own
+servers, Outlook and Apple Mail attach them to the message.
 
 ---
 
 ## Design system
 
-Colours are sampled from the Foundation wordmark:
+Colours are sampled from the Foundation wordmark, defined in
+`react-app/public/assets/css/main.css`:
 
 | Token | Value | Use |
 | --- | --- | --- |
@@ -140,61 +129,35 @@ Colours are sampled from the Foundation wordmark:
 | Brass | `#B08D57` | Tertiary rules (text uses the darker `#8A6A3B`) |
 | Paper | `#F7F5F1` | Page background |
 
-The website guide specified navy `#1B2A4A` and gold `#B08D57`. The wordmark navy and orange
-were used instead where the two disagreed, so the site matches the actual logo; the guide's
-gold survives as the brass tertiary and its light background as `--paper-2`.
-
 Type is self-hosted: **Newsreader** (display), **Inter** (body), **IBM Plex Mono** (labels
-and data) — all SIL Open Font License, latin + latin-ext subsets, ~400 KB total. Nothing is
-requested from Google Fonts, so visiting the site does not disclose a reader's IP address to
-a third party.
+and data). Nothing is requested from Google Fonts, so visiting the site does not disclose a
+reader's IP address to a third party.
 
-Every design token lives in `:root` in `assets/css/main.css`. Light and dark themes are both
-first-class: the site follows `prefers-color-scheme` and the header toggle overrides it,
-persisted in `localStorage` under `dtff-theme`.
-
----
-
-## Verification performed
-
-- **Links** — 23 pages scanned: 0 broken internal links, 0 missing anchor targets.
-- **Layout** — no horizontal overflow on any page at 360, 390, 768, 1024 or 1440 px.
-- **Contrast** — automated WCAG AA check across all pages in both themes: 0 failures.
-  (Text over the photographic band was verified separately against the scrim.)
-- **Structure** — one `h1` per page, no skipped heading levels, all images have `alt`
-  text, all form controls have labels, every page has a `main` landmark.
-- **Behaviour** — 22-check interaction suite in `_src/tests/interaction-tests.html`.
-  To run it, copy the file into `website/`, serve the site, and open it; results print
-  into the page. (Three checks depend on `requestAnimationFrame` and
-  `IntersectionObserver` ticking, so they report false failures under headless Chrome's
-  virtual time — they pass in a real browser.)
-
-Not automated, and worth a human pass before launch: screen-reader walkthrough, real-device
-testing, and legal review of the policy pages.
+**Light is the default for everyone**, regardless of operating-system setting. Dark is
+opt-in through the header toggle and persisted in `localStorage` under `dtff-theme`. There is
+deliberately no `prefers-color-scheme` rule.
 
 ---
 
-## Notes on content
+## Verification
 
-Two constraints from the website guide were treated as hard rules:
+`_src/tests/verify.html` — copy into `website/`, serve, and open it. Checks horizontal
+overflow at five widths, WCAG AA contrast, and document structure across all 26 routes.
 
-**No fabricated figures.** Every number on the site is traceable to the source documents —
-five divisions, three launch programmes, a 24-month milestone path, the USD 300,000
-two-year portfolio and its allocation. Where a proof point would normally sit (countries
-engaged, DPGs supported, publications released) the site either omits it or states plainly
-that it will be published once real.
+Client-side routing needs a server that falls back to `404.html`, as GitHub Pages does. A
+plain static server will 404 on every route except `/`:
 
-**No implied relationships.** No funder, government or digital public good is named as a
-partner. Prospective funders appear as categories, with an explicit note that they are
-illustrative. The resource library shows honest status labels and no download links until a
-resource genuinely exists. The news and project directories say they are empty rather than
-inventing entries.
+```bash
+python3 -m http.server --directory website 8000
+```
 
-Imagery is licensed under the Pexels License; photographers are credited on
-`credits.html`. Two rules were applied when selecting it: no identifiable faces, and nothing
-that could be read as depicting a real partner or beneficiary of the Foundation. Diagrams —
-the citizen risk map, the security → safety → trust → inclusion chain, the allocation bars —
-are built natively in HTML and CSS, not images, so they scale, reflow and respond to theme.
+Last run: no horizontal overflow across 130 page-width combinations; WCAG AA contrast clean;
+one `h1` per route, no skipped heading levels, all images captioned, all inputs labelled.
+
+**Known trade-off.** Rendering is client-side, so the served HTML is an empty shell until
+JavaScript runs. Crawlers that do not execute JavaScript see no content, and the site does
+not work with JavaScript disabled — a change from the previous static build. Prerendering
+at build time would restore both without changing the authoring model.
 
 ---
 

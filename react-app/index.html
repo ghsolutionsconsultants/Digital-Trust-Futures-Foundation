@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#F7F5F1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="icon" href="/assets/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/assets/img/favicon-512.png" sizes="512x512" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="preload" href="/assets/fonts/newsreader-300_700-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/fonts/inter-300_700-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <!-- Theme init: runs before React mounts to avoid flash -->
+    <script>(function(){try{var t=localStorage.getItem('dtff-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

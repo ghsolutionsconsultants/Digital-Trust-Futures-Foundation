@@ -1,0 +1,6 @@
+# Digital Trust Futures Foundation
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+Sitemap: https://digitaltrustfuturesfoundation.org/sitemap.xml

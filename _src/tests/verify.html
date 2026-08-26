@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>DTFF verification</title></head><body>
 <pre id="results">pending</pre><div id="frames"></div>
 <script>
-const PAGES=["index.html","about.html","governance.html","what-we-do.html","programmes.html","research.html","open-source.html","get-involved.html","support-our-work.html","news.html","contact.html","security.html","credits.html","thank-you.html","404.html","divisions/dpi-trust-lab.html","divisions/open-digital-commons.html","divisions/policy-evidence-centre.html","divisions/skills-academy.html","divisions/cyber-safety-centre.html","legal/privacy.html","legal/cookies.html","legal/terms.html","legal/safeguarding.html"];
+const PAGES=["/", "/about", "/human-rights", "/governance", "/what-we-do", "/programmes", "/research", "/open-source", "/civil-society", "/children-young-people", "/get-involved", "/support-our-work", "/news", "/contact", "/security", "/credits", "/thank-you", "/divisions/dpi-trust-lab", "/divisions/open-digital-commons", "/divisions/policy-evidence-centre", "/divisions/skills-academy", "/divisions/cyber-safety-centre", "/legal/privacy", "/legal/cookies", "/legal/terms", "/legal/safeguarding"];
 const WIDTHS=[360,390,768,1024,1440];
 function parse(c){const m=c.match(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/);return m?{r:+m[1],g:+m[2],b:+m[3],a:m[4]===undefined?1:+m[4]}:null}
 function lum(c){const f=v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)};return 0.2126*f(c.r)+0.7152*f(c.g)+0.0722*f(c.b)}
@@ -11,12 +11,12 @@ function effBg(el,w,base){let n=el,st=[];while(n&&n.nodeType===1){const cs=w.get
  let o=base;for(let i=st.length-1;i>=0;i--)o=blend(st[i],o);return o}
 const out=[];const push=(t,c,d)=>out.push((c?'PASS':'FAIL')+' — '+t+(d?'  ['+d+']':''));
 function frame(w){const f=document.createElement('iframe');f.style.cssText='border:0;width:'+w+'px;height:900px;display:block';document.getElementById('frames').appendChild(f);return f}
-function load(f,src){return new Promise(r=>{f.src=src;f.onload=()=>setTimeout(r,900)})}
+function load(f,src){return new Promise(r=>{f.src=src;f.onload=()=>setTimeout(r,1600)})}
 (async()=>{try{
  // ---- horizontal overflow
  let ovf=[];
  for(const w of WIDTHS){const f=frame(w);
-   for(const p of PAGES){await load(f,'/'+p);const d=f.contentDocument;
+   for(const p of PAGES){await load(f,p);const d=f.contentDocument;
      const de=d.documentElement, vw=de.clientWidth, sw=de.scrollWidth;
      if(sw>vw+1){let worst=null;d.querySelectorAll('body *').forEach(el=>{if(el.closest('.table-wrap'))return;const r=el.getBoundingClientRect();if(r.right>vw+1&&(!worst||r.right>worst.right))worst={right:Math.round(r.right),tag:el.tagName,cls:(el.className||'').toString().slice(0,30)}});
        ovf.push(p+'@'+w+' +'+(sw-vw)+'px '+(worst?worst.tag+'.'+worst.cls:''))}}
@@ -28,7 +28,7 @@ function load(f,src){return new Promise(r=>{f.src=src;f.onload=()=>setTimeout(r,
    const base = theme==='dark' ? {r:8,g:15,b:23,a:1} : {r:247,g:245,b:241,a:1};
    let cfail=[], struct=[];
    const f=frame(1280);
-   for(const p of PAGES){await load(f,'/'+p);const d=f.contentDocument,w=f.contentWindow;
+   for(const p of PAGES){await load(f,p);const d=f.contentDocument,w=f.contentWindow;
      // The theme must be baked into the served HTML: setting data-theme after
      // load updates the custom properties but headless Chrome does not always
      // re-resolve them on consuming elements, which produces false failures.

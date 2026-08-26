@@ -2,8 +2,11 @@
 """Email signature generator for the Digital Trust Futures Foundation.
 
 Run:  python3 _src/signature.py
-Out:  website/signature/<slug>.html   install page (preview + copy + plain text)
-      website/signature/<slug>.txt    plain-text signature
+Out:  react-app/public/signature/<slug>.html  install page (preview, copy, plain text)
+      react-app/public/signature/<slug>.txt   plain-text signature
+
+Output lands in the Vite public directory so it is copied into the built site
+rather than surviving by accident alongside it.
 
 Email clients are not browsers. This output is deliberately old-fashioned:
 nested tables, inline styles only, web-safe fonts, absolute image URLs, and no
@@ -13,7 +16,7 @@ Outlook for Windows silently drops.
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.abspath(os.path.join(HERE, "..", "website", "signature"))
+OUT = os.path.abspath(os.path.join(HERE, "..", "react-app", "public", "signature"))
 
 # ── The only line to change if the domain moves ──────────────────────────────
 BASE = "https://digitaltrustfuturesfoundation.org"
@@ -51,7 +54,7 @@ PEOPLE = [
 def _data_uri(filename):
     """Inline an image as base64 so it renders with no hosting at all."""
     import base64
-    path = os.path.join(HERE, "..", "website", "assets", "img", "signature", filename)
+    path = os.path.join(HERE, "..", "react-app", "public", "assets", "img", "signature", filename)
     with open(path, "rb") as fh:
         return "data:image/png;base64," + base64.b64encode(fh.read()).decode()
 
@@ -147,7 +150,7 @@ def signature_html(p, embed=False):
       This message and any attachments are confidential and intended only for the addressee. If you have received it in
       error, please notify the sender and delete it. Personal information is processed in line with the Protection of
       Personal Information Act (POPIA); see our privacy policy at
-      <a href="{BASE}/legal/privacy.html" style="color:{FAINT};text-decoration:underline;">{web_label}/legal/privacy.html</a>.
+      <a href="{BASE}/legal/privacy" style="color:{FAINT};text-decoration:underline;">{web_label}/legal/privacy</a>.
       Views expressed are those of the sender and do not constitute a certification, assurance opinion or endorsement by
       the Foundation.
     </div>
@@ -155,7 +158,7 @@ def signature_html(p, embed=False):
       Reporting a security issue? Please use
       <a href="mailto:{SECURITY_EMAIL}" style="color:{TEAL};text-decoration:none;font-weight:bold;">{SECURITY_EMAIL}</a>
       rather than replying here &mdash; see our
-      <a href="{BASE}/security.html" style="color:{FAINT};text-decoration:underline;">disclosure policy</a>.
+      <a href="{BASE}/security" style="color:{FAINT};text-decoration:underline;">disclosure policy</a>.
     </div>
   </td></tr>
 </table>"""
@@ -179,12 +182,12 @@ Independent | Non-profit | Public interest
 This message and any attachments are confidential and intended only for the
 addressee. If you have received it in error, please notify the sender and
 delete it. Personal information is processed in line with the Protection of
-Personal Information Act (POPIA); see {web_label}/legal/privacy.html. Views
+Personal Information Act (POPIA); see {web_label}/legal/privacy. Views
 expressed are those of the sender and do not constitute a certification,
 assurance opinion or endorsement by the Foundation.
 
 Reporting a security issue? Please use {SECURITY_EMAIL} rather than replying
-here - see {web_label}/security.html
+here - see {web_label}/security
 """
 
 

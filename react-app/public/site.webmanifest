@@ -1,0 +1,13 @@
+{
+  "name": "Digital Trust Futures Foundation",
+  "short_name": "DTFF",
+  "description": "Safe infrastructure. Trusted technology. Inclusive digital futures.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#F7F5F1",
+  "theme_color": "#133A63",
+  "icons": [
+    { "src": "/assets/img/favicon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/img/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

@@ -27,3 +27,7 @@ WhatsApp Image*.jpeg
 # Founder photography — original high-resolution source. The derived signature
 # avatar in website/assets/img/signature/ is committed; the 12 MB original is not.
 Founder/
+
+# Node
+node_modules/
+dist/

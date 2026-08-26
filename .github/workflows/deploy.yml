@@ -1,17 +1,17 @@
-# Build the site from source and publish it to GitHub Pages.
+# Build the React application and publish it to GitHub Pages.
 #
-# GitHub Pages can only serve a branch root or /docs, and this site lives in
+# Pages can only serve a branch root or /docs, and the built site lands in
 # website/. Publishing through Actions keeps the repository structure intact and
-# rebuilds from _src/ on every push, so the deployed site can never drift from
-# its source.
+# rebuilds from react-app/ on every push, so the deployed site can never drift
+# from its source.
 name: Deploy site
 
 on:
   push:
     branches: [main]
     paths:
-      - '_src/**'
-      - 'website/**'
+      - 'react-app/**'
+      - '_src/signature.py'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
@@ -28,59 +28,54 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: react-app
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: react-app/package-lock.json
 
-      - name: Rebuild from source
-        run: |
-          python3 _src/build.py
-          python3 _src/signature.py
+      - name: Install
+        run: npm ci
 
-      - name: Fail if the committed output is stale
+      - name: Type-check and build
+        run: npm run build
+
+      - name: Check the build produced what it should
+        working-directory: .
         run: |
-          if ! git diff --quiet -- website/; then
-            echo "::error::website/ does not match what _src/ generates."
-            echo "Run 'python3 _src/build.py && python3 _src/signature.py' and commit the result."
-            git --no-pager diff --stat -- website/
-            exit 1
+          fail=0
+          for f in website/index.html website/404.html website/sitemap.xml \
+                   website/CNAME website/_headers website/robots.txt \
+                   website/.well-known/security.txt \
+                   website/signature/godfrey-kutumela.html; do
+            [ -f "$f" ] || { echo "::error::missing $f"; fail=1; }
+          done
+
+          # 404.html must be a copy of index.html or client-side routes break:
+          # Pages serves it for every path it has no file for.
+          if ! cmp -s website/index.html website/404.html; then
+            echo "::error::404.html is not a copy of index.html — SPA routes will not resolve"
+            fail=1
           fi
-          echo "Committed output matches source."
 
-      - name: Check internal links
-        run: |
-          python3 - <<'PY'
-          import os, re, glob, sys
-          os.chdir('website')
-          files = [f for f in glob.glob('**/*.html', recursive=True) if 'signature' not in f]
-          ids = {f: set(re.findall(r'\sid="([^"]+)"', open(f, encoding='utf-8').read())) for f in files}
-          broken, anchors = [], []
-          for f in files:
-              s = open(f, encoding='utf-8').read()
-              base = os.path.dirname(f)
-              for _, val in re.findall(r'(href|src)="([^"]+)"', s):
-                  if val.startswith(('mailto:', 'tel:', 'data:', 'javascript:', 'http://', 'https://', '//')):
-                      continue
-                  if val.startswith('#'):
-                      if val[1:] not in ids[f]:
-                          anchors.append((f, val))
-                      continue
-                  path, _, frag = val.partition('#')
-                  if not path:
-                      continue
-                  t = os.path.normpath(os.path.join(base, path)) if not path.startswith('/') else path.lstrip('/')
-                  if not os.path.exists(t):
-                      broken.append((f, val)); continue
-                  if frag and t.endswith('.html') and f'id="{frag}"' not in open(t, encoding='utf-8').read():
-                      anchors.append((f, val))
-          print(f'{len(files)} pages | {len(broken)} broken links | {len(anchors)} missing anchors')
-          for x in broken + anchors:
-              print('  ', x)
-          sys.exit(1 if (broken or anchors) else 0)
-          PY
+          # Stale pages from the previous static site must not linger.
+          stale=$(ls website/*.html 2>/dev/null | grep -vE '/(index|404)\.html$' || true)
+          if [ -n "$stale" ]; then
+            echo "::error::unexpected top-level HTML in website/: $stale"
+            fail=1
+          fi
+
+          # The custom domain must survive the build, or Pages drops it.
+          [ "$(cat website/CNAME)" = "digitaltrustfuturesfoundation.org" ] \
+            || { echo "::error::CNAME is wrong: $(cat website/CNAME)"; fail=1; }
+
+          exit $fail
 
       - uses: actions/configure-pages@v5
 

@@ -1,0 +1,7 @@
+/index /index.html 301
+/home /index.html 301
+/donate /support-our-work.html 301
+/funders /support-our-work.html 301
+/divisions /what-we-do.html 301
+/.well-known/security.txt /.well-known/security.txt 200
+/* /404.html 404

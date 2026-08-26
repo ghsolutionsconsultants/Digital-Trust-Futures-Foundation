@@ -1,0 +1,7 @@
+# Digital Trust Futures Foundation — security contact
+Contact: mailto:info@digitaltrustfuturesfoundation.org
+Contact: https://digitaltrustfuturesfoundation.org/security.html
+Policy: https://digitaltrustfuturesfoundation.org/security.html
+Expires: 2027-08-07T00:00:00.000Z
+Preferred-Languages: en, fr
+Canonical: https://digitaltrustfuturesfoundation.org/.well-known/security.txt
