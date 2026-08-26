@@ -154,10 +154,12 @@ python3 -m http.server --directory website 8000
 Last run: no horizontal overflow across 130 page-width combinations; WCAG AA contrast clean;
 one `h1` per route, no skipped heading levels, all images captioned, all inputs labelled.
 
-**Known trade-off.** Rendering is client-side, so the served HTML is an empty shell until
-JavaScript runs. Crawlers that do not execute JavaScript see no content, and the site does
-not work with JavaScript disabled — a change from the previous static build. Prerendering
-at build time would restore both without changing the authoring model.
+**Known trade-off.** Rendering is client-side, so the served HTML is a shell until
+JavaScript runs. `react-app/index.html` carries a default title, description, canonical and
+social card so crawlers and link previews get *something*, but per-route metadata and all
+page content only exist once the app mounts. The site does not work with JavaScript
+disabled — a change from the previous static build. Prerendering at build time would restore
+both without changing the authoring model.
 
 ---
 

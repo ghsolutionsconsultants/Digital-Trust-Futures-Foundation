@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <SeoHead
         title="Digital Trust Futures Foundation — Protecting people, their rights and the digital systems they depend on."
-        description="An independent, non-profit public-benefit organisation protecting people, their rights and the institutions that serve them as digital public infrastructure, open-source technology and AI-enabled public services scale across Africa and the Global South."
+        description="An independent, non-profit company working toward public-benefit status protecting people, their rights and the institutions that serve them as digital public infrastructure, open-source technology and AI-enabled public services scale across Africa and the Global South."
         canonical="index.html"
       />
 
@@ -26,7 +26,7 @@ export default function Home() {
             <p className="eyebrow">Independent · Non-profit · Rights-respecting · Public interest</p>
             <h1>Digital public infrastructure is only as good as the <span className="mark">protection</span> around it.</h1>
             <p className="hero-lede">
-              Digital Trust Futures Foundation is an independent, non-profit public-benefit organisation
+              Digital Trust Futures Foundation is an independent, non-profit company working toward public-benefit status
               protecting people, their rights and the institutions that serve them as digital public
               infrastructure, open-source technology and AI-enabled public services scale across
               Africa and the Global South.
