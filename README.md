@@ -141,6 +141,22 @@ deliberately no `prefers-color-scheme` rule.
 
 ## Verification
 
+Two suites:
+
+```bash
+cd react-app && npm run build && npm run check
+```
+
+`scripts/check.mjs` drives a real Chrome against the built site, served the way GitHub Pages
+serves it. It covers every route mounting, scroll-reveal actually revealing, JavaScript
+errors and failed requests, per-route canonical/`og:url`/title, the theme toggle and its
+persistence, client-side navigation, the resource filters, the enquiry form's Web3Forms
+wiring, and the legacy `.html` redirects. 14 checks.
+
+It has to be a real browser: headless Chrome's `--virtual-time-budget` does not tick
+`IntersectionObserver` or `requestAnimationFrame` reliably, so a DOM dump reports content as
+permanently invisible when it is merely mid-fade.
+
 `_src/tests/verify.html` — copy into `website/`, serve, and open it. Checks horizontal
 overflow at five widths, WCAG AA contrast, and document structure across all 26 routes.
 
@@ -151,15 +167,19 @@ plain static server will 404 on every route except `/`:
 python3 -m http.server --directory website 8000
 ```
 
-Last run: no horizontal overflow across 130 page-width combinations; WCAG AA contrast clean;
-one `h1` per route, no skipped heading levels, all images captioned, all inputs labelled.
+Last run: 14/14 browser checks; no horizontal overflow across 130 page-width combinations;
+WCAG AA contrast clean; one `h1` per route, no skipped heading levels, all images captioned,
+all inputs labelled. Also verified to run with zero violations under the production CSP in
+`_headers`.
 
-**Known trade-off.** Rendering is client-side, so the served HTML is a shell until
-JavaScript runs. `react-app/index.html` carries a default title, description, canonical and
-social card so crawlers and link previews get *something*, but per-route metadata and all
-page content only exist once the app mounts. The site does not work with JavaScript
-disabled — a change from the previous static build. Prerendering at build time would restore
-both without changing the authoring model.
+**Known trade-off.** Rendering is client-side, so the served HTML is an empty shell until
+JavaScript runs: no content and no metadata for anything that does not execute it. The shell
+deliberately carries no `<title>`, description, canonical or social tags, because
+`react-helmet-async` appends rather than replaces — leaving them there gave every route two
+`<title>` elements and two canonicals, the second wrongly claiming to be the homepage, which
+is worse than having none. The site also does not work with JavaScript disabled, a change
+from the previous static build. Prerendering at build time is the fix for all of this and
+would not change the authoring model.
 
 ---
 

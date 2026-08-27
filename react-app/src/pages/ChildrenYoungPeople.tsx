@@ -41,7 +41,6 @@ export default function ChildrenYoungPeople() {
       <SeoHead
         title="Children & Young People"
         description="DTFF's cross-foundation Children and Young People Digital Trust & Safety Initiative — 9 workstreams, the D-CRIA assessment method, and participation not just protection for children's digital futures."
-        canonical="children-young-people.html"
       />
 
       <PageHero

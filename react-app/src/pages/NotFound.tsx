@@ -8,7 +8,6 @@ export default function NotFound() {
       <SeoHead
         title="Page not found"
         description="The page you requested could not be found."
-        canonical="404.html"
       />
 
       <section className="section" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center' }}>

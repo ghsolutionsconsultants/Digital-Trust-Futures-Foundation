@@ -12,7 +12,6 @@ export default function WhatWeDo() {
       <SeoHead
         title="What we do"
         description="Five programme divisions covering DPI security assurance, open-source and software trust, policy and evidence, skills and implementation, and public-interest cyber support for civil society."
-        canonical="what-we-do.html"
       />
 
       <PageHero

@@ -1,16 +1,29 @@
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 import { SITE, ORG, OG_IMAGE, fullTitle, ORG_JSONLD } from '../../data/siteConfig';
 
 interface SeoHeadProps {
   title: string;
   description: string;
-  canonical: string;
+  /** Optional override. Normally omitted: the canonical is taken from the live
+   *  route, so it can never disagree with the URL actually being served. */
+  canonical?: string;
   jsonldExtra?: object;
 }
 
+/** Routes are extensionless. Callers may still pass legacy ".html" values, so
+ *  normalise them rather than advertising a URL that only exists as a redirect. */
+function toPath(value: string): string {
+  const v = value.replace(/^\/+/, '');
+  if (v === '' || v === 'index.html' || v === 'index') return '/';
+  return '/' + v.replace(/\.html$/, '');
+}
+
 export function SeoHead({ title, description, canonical, jsonldExtra }: SeoHeadProps) {
+  const { pathname } = useLocation();
   const ft = fullTitle(title);
-  const canonicalUrl = `${SITE}/${canonical}`;
+  const path = canonical ? toPath(canonical) : pathname;
+  const canonicalUrl = SITE + (path === '/' ? '/' : path);
 
   return (
     <Helmet>

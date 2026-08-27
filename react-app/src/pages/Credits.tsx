@@ -20,7 +20,6 @@ export default function Credits() {
       <SeoHead
         title="Credits and colophon"
         description="Attribution for the photography, typefaces and tooling used to build this website, and a note on the licences that apply to the Foundation's own material."
-        canonical="credits.html"
       />
 
       <PageHero

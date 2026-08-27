@@ -36,7 +36,6 @@ export default function OpenSource() {
       <SeoHead
         title="Open source"
         description="The Foundation creates, hosts, secures and sustains open-source digital public goods. Find out about project support services, security advisories and how to contribute or propose a project."
-        canonical="open-source.html"
       />
 
       <PageHero

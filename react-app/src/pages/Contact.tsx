@@ -9,7 +9,6 @@ export default function Contact() {
       <SeoHead
         title="Contact"
         description="Contact the Digital Trust Futures Foundation with enquiries about programmes, partnerships, funding, careers and general information."
-        canonical="contact.html"
       />
 
       <PageHero

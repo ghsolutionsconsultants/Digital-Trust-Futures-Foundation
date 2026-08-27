@@ -11,7 +11,6 @@ interface LegalPageProps {
   eyebrow: string;
   lede: string;
   sections: LegalSection[];
-  slug: string;
 }
 
 const LEGAL_NOTE = (
@@ -22,13 +21,12 @@ const LEGAL_NOTE = (
   </div>
 );
 
-export function LegalPage({ title, eyebrow, lede, sections, slug }: LegalPageProps) {
+export function LegalPage({ title, eyebrow, lede, sections }: LegalPageProps) {
   return (
     <>
       <SeoHead
         title={title}
         description={lede}
-        canonical={`legal/${slug}.html`}
       />
 
       <PageHero
@@ -65,7 +63,6 @@ export function Privacy() {
       title="Privacy policy"
       eyebrow="Legal"
       lede="The Foundation collects as little personal data as it can, keeps it for as short a time as it can, and never sells or shares it for marketing."
-      slug="privacy"
       sections={[
         { heading: 'Who we are', body: '<p>Digital Trust Futures Foundation NPC, a non-profit company registered in South Africa, is the responsible party for personal information processed through this website and in the course of its programmes.</p>' },
         { heading: 'What data we collect', body: '<p>Through the website: names, email addresses, job titles, organisations and countries submitted through contact and enquiry forms. Newsletter subscriptions require an email address and explicit consent only. The site stores one value in your browser: your light or dark theme preference (not a cookie — a localStorage value). No analytics, tracking or advertising data is collected.</p><p>Through programme work: the Foundation may collect personal data from programme participants, research subjects and beneficiaries under separate, programme-specific consent and data-sharing arrangements that comply with applicable law.</p>' },
@@ -87,7 +84,6 @@ export function Cookies() {
       title="Cookies and local storage"
       eyebrow="Legal"
       lede="This website does not set cookies. It stores one value — your theme preference — in your browser's local storage."
-      slug="cookies"
       sections={[
         { heading: 'No cookies', body: '<p>This website does not set or read any cookies — not for analytics, advertising, session management or any other purpose. You will not see a cookie banner because there are no cookies to consent to.</p>' },
         { heading: 'Local storage', body: '<p>The only browser-stored value is your light or dark theme preference, held in <code>localStorage</code> under the key <code>dtff-theme</code>. This value never leaves your device. It is not transmitted to the server. It is not shared with anyone. To delete it, clear your browser\'s local storage or site data.</p>' },
@@ -105,7 +101,6 @@ export function Terms() {
       title="Terms of use"
       eyebrow="Legal"
       lede="Conditions for using this website and the materials published on it."
-      slug="terms"
       sections={[
         { heading: 'Use of this site', body: '<p>This website is operated by Digital Trust Futures Foundation NPC for information and public-interest purposes. By using it you agree to these terms.</p>' },
         { heading: 'Intellectual property', body: '<p>Content, research and toolkits published by the Foundation are released under Creative Commons Attribution 4.0 International (CC BY 4.0) unless a specific page or resource states otherwise. You may share and adapt the material, including commercially, provided you give appropriate credit and indicate any changes made.</p><p>The Digital Trust Futures Foundation name, logo and wordmark are not covered by the open licence. Please ask before using them.</p><p>Software released by the Foundation is published under the licence stated in the relevant repository.</p>' },
@@ -126,7 +121,6 @@ export function Safeguarding() {
       title="Safeguarding policy"
       eyebrow="Legal"
       lede="The Foundation's commitment to protecting children, vulnerable adults and programme participants from harm."
-      slug="safeguarding"
       sections={[
         { heading: 'Purpose', body: '<p>Digital Trust Futures Foundation is committed to safeguarding the welfare of children, vulnerable adults and anyone who participates in or is affected by its programmes. This policy sets out the Foundation\'s commitment and the minimum standards that apply to all staff, fellows, contractors and partners.</p>' },
         { heading: 'Scope', body: '<p>This policy applies to all Foundation staff, secondees, fellows, volunteers, contractors, consultants and partner organisations delivering Foundation activities. It covers direct contact with participants and the handling of data about vulnerable individuals.</p>' },

@@ -83,7 +83,6 @@ export default function Governance() {
       <SeoHead
         title="Governance and accountability"
         description="The Foundation's independent Board, executive office, operating model, relationship with Nucleus Systems, intellectual property model, transparency commitments and launch risk register."
-        canonical="governance.html"
       />
 
       <PageHero

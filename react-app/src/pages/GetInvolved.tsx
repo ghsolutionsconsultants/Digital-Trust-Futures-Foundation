@@ -29,7 +29,6 @@ export default function GetInvolved() {
       <SeoHead
         title="Get involved"
         description="Five routes in — for governments, DPG maintainers, funders, civil-society organisations and researchers. One enquiry form routes to the right team."
-        canonical="get-involved.html"
       />
 
       <PageHero
@@ -76,7 +75,7 @@ export default function GetInvolved() {
             <form className="form card" action="https://api.web3forms.com/submit" method="POST" data-reveal="">
               <input type="hidden" name="access_key" value="65b5c951-5ecf-4ac9-8dfc-0b467534e77e" />
               <input type="hidden" name="from_name" value="Digital Trust Futures Foundation website" />
-              <input type="hidden" name="redirect" value="https://digitaltrustfuturesfoundation.org/thank-you.html" />
+              <input type="hidden" name="redirect" value="https://digitaltrustfuturesfoundation.org/thank-you" />
               <input type="checkbox" name="botcheck" className="visually-hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden={true} />
 
               <div className="field">

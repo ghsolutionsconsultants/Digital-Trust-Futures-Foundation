@@ -43,7 +43,6 @@ export default function Research() {
       <SeoHead
         title="Research and resources"
         description="The Foundation's full library of frameworks, toolkits, checklists, briefs and reports — all released as open public goods. Filter by theme and see the honest publication status of every item."
-        canonical="research.html"
       />
 
       <PageHero

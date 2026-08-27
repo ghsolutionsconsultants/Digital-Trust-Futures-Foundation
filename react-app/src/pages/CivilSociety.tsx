@@ -41,7 +41,6 @@ export default function CivilSociety() {
       <SeoHead
         title="Civil Society & Human Rights Defenders"
         description="How DTFF supports civil society organisations, human rights defenders, journalists and civic-space organisations — as beneficiaries, evidence partners and accountability participants in rights-respecting digital trust."
-        canonical="civil-society.html"
       />
 
       <PageHero

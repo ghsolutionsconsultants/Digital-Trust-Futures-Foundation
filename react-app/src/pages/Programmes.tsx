@@ -60,7 +60,6 @@ export default function Programmes() {
       <SeoHead
         title="Programmes"
         description="Three connected launch programmes — citizen digital safety, DPI security assurance and the Global South digital trust coordination network — plus the flagship safeguards initiative, fellowships and 24-month roadmap."
-        canonical="programmes.html"
       />
 
       <PageHero

@@ -8,7 +8,6 @@ export default function Security() {
       <SeoHead
         title="Security disclosure policy"
         description="How to report a vulnerability to the Digital Trust Futures Foundation, what we will do with it, the safe harbour statement, and how our own website is built."
-        canonical="security.html"
       />
 
       <PageHero

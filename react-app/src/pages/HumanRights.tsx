@@ -61,7 +61,6 @@ export default function HumanRights() {
       <SeoHead
         title="Human Rights & Digital Trust"
         description="How DTFF applies rights-respecting assurance to digital public infrastructure — covering 11 human-rights domains, the 5-lens operating framework, and effective remedy as a distinctive theme."
-        canonical="human-rights.html"
       />
 
       <PageHero

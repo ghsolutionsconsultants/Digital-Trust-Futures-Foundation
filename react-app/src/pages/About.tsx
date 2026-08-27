@@ -62,7 +62,6 @@ export default function About() {
       <SeoHead
         title="About the Foundation"
         description="Who we are: an independent public-benefit foundation providing rights-respecting digital trust assurance, cybersecurity, safety, human rights and child protection for digital public infrastructure, digital public goods and AI-enabled public services in Africa and the Global South."
-        canonical="about.html"
       />
 
       <PageHero

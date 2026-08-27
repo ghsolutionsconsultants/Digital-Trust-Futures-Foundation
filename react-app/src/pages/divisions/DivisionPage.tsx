@@ -28,7 +28,6 @@ export default function DivisionPage() {
       <SeoHead
         title={d.name}
         description={DIV_DESC[d.slug]}
-        canonical={`divisions/${d.slug}.html`}
         jsonldExtra={{
           '@context': 'https://schema.org',
           '@type': 'BreadcrumbList',

@@ -65,7 +65,6 @@ export default function SupportOurWork() {
       <SeoHead
         title="Support our work"
         description="The Foundation's two-year USD 300,000 launch portfolio: where the money goes, what it buys, the funding model and the investment case for independent digital trust assurance in the Global South."
-        canonical="support-our-work.html"
       />
 
       <PageHero

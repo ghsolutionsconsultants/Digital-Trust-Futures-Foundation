@@ -13,7 +13,6 @@ export default function Home() {
       <SeoHead
         title="Digital Trust Futures Foundation — Protecting people, their rights and the digital systems they depend on."
         description="An independent, non-profit company working toward public-benefit status protecting people, their rights and the institutions that serve them as digital public infrastructure, open-source technology and AI-enabled public services scale across Africa and the Global South."
-        canonical="index.html"
       />
 
       {/* ── Hero ── */}

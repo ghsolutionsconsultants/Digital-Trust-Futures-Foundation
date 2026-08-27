@@ -11,7 +11,6 @@ export default function ThankYou() {
       <SeoHead
         title="Thank you"
         description="Your submission has been received."
-        canonical="thank-you.html"
       />
 
       <section className="section" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center' }}>

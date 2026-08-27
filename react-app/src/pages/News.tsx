@@ -25,7 +25,6 @@ export default function News() {
       <SeoHead
         title="News and events"
         description="Announcements, publications, events and security advisories from the Digital Trust Futures Foundation. Nothing is listed until it has actually happened."
-        canonical="news.html"
       />
 
       <PageHero
@@ -103,7 +102,7 @@ export default function News() {
                 <input type="hidden" name="access_key" value="65b5c951-5ecf-4ac9-8dfc-0b467534e77e" />
                 <input type="hidden" name="subject" value="Newsletter signup" />
                 <input type="hidden" name="from_name" value="Digital Trust Futures Foundation website" />
-                <input type="hidden" name="redirect" value="https://digitaltrustfuturesfoundation.org/thank-you.html?t=newsletter" />
+                <input type="hidden" name="redirect" value="https://digitaltrustfuturesfoundation.org/thank-you?t=newsletter" />
                 <input type="checkbox" name="botcheck" className="visually-hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" aria-hidden={true} />
                 <div className="field">
                   <label htmlFor="nl-email">Email address</label>
