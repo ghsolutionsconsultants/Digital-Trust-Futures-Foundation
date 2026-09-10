@@ -148,23 +148,49 @@ export default function DivisionPage() {
       {/* Division navigation */}
       <section className="section section--alt">
         <div className="container">
-          <div className="div-nav">
-            {prev && (
-              <Link className="div-nav-item" to={`/divisions/${prev.slug}`}>
-                <span className="mono-label">Previous division</span>
-                <span className="div-nav-name">{prev.name}</span>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            gap: '1px',
+            borderTop: '1px solid var(--border)',
+            paddingTop: 'clamp(1.5rem, 3vw, 2.5rem)',
+          }}>
+            {/* Left — previous */}
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              {prev && (
+                <Link
+                  to={`/divisions/${prev.slug}`}
+                  style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', textDecoration: 'none', color: 'inherit' }}
+                >
+                  <span className="mono-label" style={{ opacity: 0.6 }}>← Previous division</span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--step-1)', color: 'var(--heading)', fontWeight: 500, lineHeight: 1.3 }}>{prev.name}</span>
+                </Link>
+              )}
+            </div>
+
+            {/* Centre — all divisions */}
+            <div style={{ display: 'flex', justifyContent: 'center', paddingInline: 'clamp(1.5rem, 3vw, 3rem)', borderInline: '1px solid var(--border)' }}>
+              <Link
+                to="/what-we-do"
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', color: 'inherit' }}
+              >
+                <span className="mono-label" style={{ opacity: 0.6 }}>All divisions</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--step-1)', color: 'var(--heading)', fontWeight: 500, lineHeight: 1.3 }}>What we do</span>
               </Link>
-            )}
-            <Link className="div-nav-item div-nav-item--center" to="/what-we-do">
-              <span className="mono-label">All divisions</span>
-              <span className="div-nav-name">What we do</span>
-            </Link>
-            {next && (
-              <Link className="div-nav-item div-nav-item--right" to={`/divisions/${next.slug}`}>
-                <span className="mono-label">Next division</span>
-                <span className="div-nav-name">{next.name}</span>
-              </Link>
-            )}
+            </div>
+
+            {/* Right — next */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              {next && (
+                <Link
+                  to={`/divisions/${next.slug}`}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem', textDecoration: 'none', color: 'inherit' }}
+                >
+                  <span className="mono-label" style={{ opacity: 0.6 }}>Next division →</span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--step-1)', color: 'var(--heading)', fontWeight: 500, lineHeight: 1.3, textAlign: 'right' }}>{next.name}</span>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </section>

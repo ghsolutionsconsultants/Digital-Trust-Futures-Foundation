@@ -197,11 +197,11 @@ export default function SupportOurWork() {
           <div className="split split--even mt-8" style={{ alignItems: 'start' }}>
             <div className="callout" data-reveal=""><h3>Funding principles</h3><ul className="dot-list mt-4">{PRINCIPLES.map((p) => <li key={p}>{p}</li>)}</ul></div>
             <div className="callout callout--teal" data-reveal=""><h3>Indicative three-year mix</h3>
-              <ul className="dot-list dot-list--teal mt-4">
-                <li><strong>Founding or anchor grant</strong> — establishes the Board, core team and Phase 1 divisions in Year 1; renewal or successor grant thereafter.</li>
-                <li><strong>Donor and DFI grants</strong> — one to two programme-specific grants in Year 1, diversifying to three to five across divisions in Years 2 and 3.</li>
-                <li><strong>Government contracts</strong> — pilot country engagements first, then recurring national assessments.</li>
-                <li><strong>Training and fees</strong> — a pilot cohort first, then recurring Academy revenue.</li>
+              <ul className="dot-list dot-list--teal mt-4" style={{ paddingLeft: 0 }}>
+                <li><strong>Founding or anchor grant</strong><br /><span style={{ color: 'var(--text-2)' }}>Establishes the Board, core team and Phase 1 divisions in Year 1; renewal or successor grant thereafter.</span></li>
+                <li><strong>Donor and DFI grants</strong><br /><span style={{ color: 'var(--text-2)' }}>One to two programme-specific grants in Year 1, diversifying to three to five across divisions in Years 2 and 3.</span></li>
+                <li><strong>Government contracts</strong><br /><span style={{ color: 'var(--text-2)' }}>Pilot country engagements first, then recurring national assessments.</span></li>
+                <li><strong>Training and fees</strong><br /><span style={{ color: 'var(--text-2)' }}>A pilot cohort first, then recurring Academy revenue.</span></li>
               </ul>
             </div>
           </div>

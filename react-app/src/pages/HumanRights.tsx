@@ -65,8 +65,8 @@ export default function HumanRights() {
 
       <PageHero
         eyebrow="Human Rights & Digital Trust"
-        title="Rights-respecting digital trust — what it means and how we test it"
-        lede="Cybersecurity tells us whether a system can be compromised. Human-rights assurance asks what happens to people even when the system is functioning exactly as designed. DTFF does both."
+        title="Rights-respecting digital trust assurance frameworks — what it means and how we assess it"
+        lede="Cybersecurity helps determine whether a digital system is resilient against compromise, misuse, or disruption. Human-rights assurance adds a complementary perspective by examining how the system's design, operation, and outcomes affect people's rights, dignity, agency, and access to remedy. Digital Trust Futures Foundation brings these two perspectives together as part of a broader approach to trustworthy digital systems."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'About', href: '/about' }, { label: 'Human Rights & Digital Trust' }]}
         extra={
           <nav className="section-nav" data-section-nav="" aria-label="On this page">
@@ -85,15 +85,15 @@ export default function HumanRights() {
           <div className="split split--sticky">
             <div data-reveal="">
               <p className="eyebrow">Core proposition</p>
-              <h2 className="balance">The distinctive DTFF position: security plus rights</h2>
+              <h2 className="balance">The distinctive DTFF position: Security + Safety + Rights + Trust + Inclusion</h2>
             </div>
             <div className="flow" data-reveal="">
-              <p className="lede">Digital Trust Futures Foundation protects people and their rights as digital systems become critical infrastructure — bringing independent cybersecurity, human-rights assurance, child safety, civil-society resilience and open public-interest tools to DPI, DPGs and AI-enabled public services across Africa and the Global South.</p>
+              <p className="lede">Digital infrastructure deserves public trust only when it is secure against attack, safe for the people who depend on it, respectful of fundamental rights, accountable when harm occurs, and genuinely inclusive in practice. Digital Trust Futures Foundation independently tests and strengthens all five conditions across Digital Public Infrastructure, Digital Public Goods and AI-enabled public services — protecting people, children, civil society and vulnerable communities across Africa and the Global South.</p>
               <div className="callout callout--flag" style={{ borderLeftColor: 'var(--teal-500)' }}>
                 <h3>The differentiator</h3>
-                <p className="mt-3">Commercial cybersecurity can test whether a DPI system is technically vulnerable. DTFF additionally asks whether a system that is functioning exactly as designed can still cause unlawful surveillance, discriminatory exclusion, opaque automated decisions, loss of agency, unsafe data sharing or harm to children and vulnerable communities.</p>
+                <p className="mt-3">Conventional cybersecurity asks whether a digital system can be compromised. Digital Trust Futures Foundation also asks whether the system itself can compromise people — even when it is functioning exactly as designed.</p>
+                <p className="mt-3">We examine surveillance, discriminatory exclusion, identity and data misuse, opaque automated decisions, loss of agency, weak recourse and harms affecting children, civil society and vulnerable communities. Technical security alone is not sufficient evidence of digital trust.</p>
               </div>
-              <p className="text-muted mt-4">The recommended evolution for digital trust work is: <strong>Security → Safety → Rights → Trust → Inclusion.</strong> These are not competing objectives — they are a dependency chain. A system cannot be genuinely trustworthy if it fails on rights, and it cannot achieve sustained inclusion if it is not trusted.</p>
             </div>
           </div>
         </div>
@@ -165,11 +165,12 @@ export default function HumanRights() {
           <div className="split split--sticky">
             <div data-reveal="">
               <p className="eyebrow">Effective remedy</p>
-              <h2 className="balance">A distinctive DTFF theme: what happens after harm</h2>
-              <p className="lede mt-4">Many digital programmes emphasise prevention without asking what happens after harm. DTFF distinguishes itself by assessing whether users can recover when systems fail or make incorrect decisions.</p>
+              <h2 className="balance">A distinctive DTFF theme: from protection to effective recourse post-harm and any potential adverse harm</h2>
+              <p className="lede mt-4">Digital trust depends not only on preventing harm, but also on ensuring that people can obtain a fair and practical resolution when adverse outcomes occur. Digital Trust Futures Foundation therefore assesses whether digital systems provide meaningful explanation, review, correction, appeal and remedy — particularly where identity, payments, public services or automated decisions affect an individual's rights, access or opportunities.</p>
               <div className="callout mt-6" style={{ fontStyle: 'italic', fontSize: '1.1em' }}>
-                "If the technology gets it wrong, can the person recover?"
+                "If a digital system or decision adversely affects a person, are there effective mechanisms for explanation, review, correction and remedy?"
               </div>
+              <p className="text-muted mt-4">DTFF strongly believes that effective recourse is a core component of trust rather than a response to defective technology.</p>
             </div>
             <div data-reveal="">
               <p className="mono-label mb-4">The standard DTFF remedy pathway</p>
@@ -203,8 +204,8 @@ export default function HumanRights() {
         <div className="container">
           <div className="section-head" data-reveal="">
             <p className="eyebrow">Open tools</p>
-            <h2 className="balance">Rights assurance tools released as public goods</h2>
-            <p style={{ maxWidth: '64ch' }}>DTFF translates the rights framework into reusable, open tools — so that human rights and child protection are visible methods, not just language.</p>
+            <h2 className="balance">Rights assurance translated into practical public goods</h2>
+            <p style={{ maxWidth: '64ch' }}>Digital Trust Futures Foundation converts its human-rights, child-safety, and digital-trust principles into practical, reusable assurance tools that governments, civil society, researchers, funders, and technology communities can apply. By releasing these resources openly wherever appropriate, the Foundation helps make rights protection measurable, repeatable and actionable in the design, assessment and governance of digital systems.</p>
           </div>
           <div className="grid grid-2 mt-7" data-reveal-stagger="">
             <article className="card">

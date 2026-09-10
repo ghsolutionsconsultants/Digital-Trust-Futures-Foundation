@@ -21,7 +21,7 @@ export const ORG_JSONLD = {
   logo: `${SITE}/assets/img/logo-full.png`,
   slogan: TAGLINE,
   description:
-    'An independent, non-profit company working toward public-benefit status strengthening the safety, security, inclusion and trustworthiness of digital public infrastructure, digital public goods, open-source technology and AI-enabled public services.',
+    'An independent, non-profit public-benefit organisation strengthening the safety, security, inclusion and trustworthiness of digital public infrastructure, digital public goods, open-source technology and AI-enabled public services.',
   foundingDate: '2026',
   address: { '@type': 'PostalAddress', addressCountry: 'ZA' },
   areaServed: ['Africa', 'Global South'],

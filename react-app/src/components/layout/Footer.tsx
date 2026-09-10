@@ -18,7 +18,7 @@ export function Footer() {
               loading="lazy"
             />
             <p className="footer-blurb">
-              An independent, non-profit company working toward public-benefit status strengthening the safety, security,
+              An independent, non-profit public-benefit organisation strengthening the safety, security,
               inclusion and trustworthiness of digital public infrastructure, digital public goods,
               open-source technology and AI-enabled public services.
             </p>

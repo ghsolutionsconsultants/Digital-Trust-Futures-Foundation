@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <SeoHead
         title="Digital Trust Futures Foundation — Protecting people, their rights and the digital systems they depend on."
-        description="An independent, non-profit company working toward public-benefit status protecting people, their rights and the institutions that serve them as digital public infrastructure, open-source technology and AI-enabled public services scale across Africa and the Global South."
+        description="An independent, non-profit public-benefit organisation protecting people, their rights and the institutions that serve them as digital public infrastructure, open-source technology and AI-enabled public services scale across Africa and the Global South."
       />
 
       {/* ── Hero ── */}
@@ -25,7 +25,7 @@ export default function Home() {
             <p className="eyebrow">Independent · Non-profit · Rights-respecting · Public interest</p>
             <h1>Digital public infrastructure is only as good as the <span className="mark">protection</span> around it.</h1>
             <p className="hero-lede">
-              Digital Trust Futures Foundation is an independent, non-profit company working toward public-benefit status
+              Digital Trust Futures Foundation is an independent, non-profit public-benefit organisation
               protecting people, their rights and the institutions that serve them as digital public
               infrastructure, open-source technology and AI-enabled public services scale across
               Africa and the Global South.
@@ -146,21 +146,25 @@ export default function Home() {
       {/* ── Stats ── */}
       <section className="section section--alt">
         <div className="container">
-          <div className="stat-grid" data-reveal-stagger="">
-            <div className="stat-item">
-              <span className="stat-num">50+</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'clamp(2rem, 4vw, 3.5rem)' }} data-reveal-stagger="">
+            <div className="stat">
+              <div className="stat-rule" />
+              <span className="stat-figure">50+</span>
               <span className="stat-label">Countries deploying or scaling DPI</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-num">$billions</span>
+            <div className="stat">
+              <div className="stat-rule" />
+              <span className="stat-figure">$billions</span>
               <span className="stat-label">Annual donor investment in digital infrastructure</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-num">Dozens</span>
+            <div className="stat">
+              <div className="stat-rule" />
+              <span className="stat-figure">Dozens</span>
               <span className="stat-label">DPGs with no dedicated security funding</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-num">0</span>
+            <div className="stat">
+              <div className="stat-rule" />
+              <span className="stat-figure">0</span>
               <span className="stat-label">Independent, nonprofit DPI trust organisations in the Global South</span>
             </div>
           </div>
@@ -175,20 +179,20 @@ export default function Home() {
             <h2 className="balance">Three mutually reinforcing programmes</h2>
           </div>
           <div className="grid grid-3 mt-7" data-reveal-stagger="">
-            <article className="prog-card prog-card--1">
-              <span className="prog-index">1</span>
+            <article className="prog-card prog-card--1" style={{ overflow: 'visible', paddingTop: 'calc(clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem) + 1.2rem)' }}>
+              <span className="prog-index" style={{ position: 'absolute', top: 'clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem)', left: 'clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem)', boxShadow: '0 0 0 4px var(--surface)' }}>1</span>
               <h3>Citizen Digital Safety and DPI Trust Programme</h3>
               <p>Community safety toolkits, awareness, user protection learning and citizen harm reporting.</p>
               <Link className="link-arrow mt-4" to="/programmes#citizen-safety">Programme detail<ArrowIcon /></Link>
             </article>
-            <article className="prog-card prog-card--2">
-              <span className="prog-index">2</span>
+            <article className="prog-card prog-card--2" style={{ overflow: 'visible', paddingTop: 'calc(clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem) + 1.2rem)' }}>
+              <span className="prog-index" style={{ position: 'absolute', top: 'clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem)', left: 'clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem)', boxShadow: '0 0 0 4px var(--surface)' }}>2</span>
               <h3>DPI Security Assurance and Resilience Lab</h3>
               <p>Independent public-interest assessment of identity, payment, data exchange, DPG and AI risks — including human-rights and child-rights dimensions.</p>
               <Link className="link-arrow mt-4" to="/programmes#assurance-lab">Programme detail<ArrowIcon /></Link>
             </article>
-            <article className="prog-card prog-card--3">
-              <span className="prog-index">3</span>
+            <article className="prog-card prog-card--3" style={{ overflow: 'visible', paddingTop: 'calc(clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem) + 1.2rem)' }}>
+              <span className="prog-index" style={{ position: 'absolute', top: 'clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem)', left: 'clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem)', boxShadow: '0 0 0 4px var(--surface)' }}>3</span>
               <h3>Global South Digital Trust Coordination and Cyber Resilience Network</h3>
               <p>Roundtables, shared playbooks, knowledge hub, cross-border learning and civil-society readiness.</p>
               <Link className="link-arrow mt-4" to="/programmes#coordination-network">Programme detail<ArrowIcon /></Link>
@@ -217,10 +221,10 @@ export default function Home() {
             <div className="flow" data-reveal="">
               <div className="callout">
                 <h3>Three formal civil-society roles</h3>
-                <ul className="dot-list mt-4">
-                  <li><strong>Beneficiary</strong> — Cyber helpdesk, threat modelling, secure communications, incident referral and organisational resilience.</li>
-                  <li><strong>Evidence partner</strong> — Local partners surface anonymised harm patterns that commercial assessments miss.</li>
-                  <li><strong>Accountability participant</strong> — Civil society shapes DPI consultations, toolkit testing and methodology review.</li>
+                <ul className="dot-list mt-4" style={{ paddingLeft: 0, margin: '1rem 0 0' }}>
+                  <li><strong>Beneficiary</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Cyber helpdesk, threat modelling, secure communications, incident referral and organisational resilience.</span></li>
+                  <li><strong>Evidence partner</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Local partners surface anonymised harm patterns that commercial assessments miss.</span></li>
+                  <li><strong>Accountability participant</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Civil society shapes DPI consultations, toolkit testing and methodology review.</span></li>
                 </ul>
               </div>
             </div>

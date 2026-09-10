@@ -18,7 +18,7 @@ const EXEC = [
   ['Director of Programmes', 'Delivery of the programme divisions and their charters.'],
   ['Director of Research', 'Research quality, sign-off on publications and case studies.'],
   ['Director of Technology and Open Source', 'Open-source projects, repositories, security and technical standards.'],
-  ['Director of Partnerships and Funding', 'Funder relationships, government counterparts and overall sector strategy.'],
+  ['Director of Partnerships and Funding', 'Funder relationships, government counterparts and overall site strategy.'],
   ['Finance and Operations Manager', 'Financial controls, grant administration and operations.'],
   ['Monitoring, Evaluation and Learning Lead', 'The MEL framework and reporting against the theory of change.'],
   ['Head of Human Rights, Safeguarding and Ethics', 'Human rights, child protection, safeguarding, ethics review and handling of citizen-harm evidence. Reports to the Executive Director with a direct escalation path to the Board for material concerns.'],
