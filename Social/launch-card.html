@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DTFF launch card</title>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<style>
+  :root{
+    --navy-900:#071624; --navy-850:#0A1F36; --navy-700:#133A63; --navy-600:#1B4B7D;
+    --navy-300:#7FA5C6;
+    --orange:#BC5012; --orange-400:#E8783C;
+    --teal:#247E83; --teal-300:#8ED2D5;
+    --brass:#B08D57;
+    --paper:#F7F5F1; --mute:#A6BACB; --dim:#7C97AF;
+    --display:'Newsreader',Georgia,serif;
+    --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px}
+  body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+  .card{
+    width:1080px;height:1350px;padding:62px 70px 54px;
+    display:flex;flex-direction:column;color:var(--paper);
+    position:relative;overflow:hidden;
+    background:linear-gradient(171deg,#0E2A49 0%, #0A1F36 40%, #081A2D 72%, #050F1B 100%);
+  }
+
+  /* Light. A warm low glow behind the statement and a cool one opposite it,
+     so the card has a direction of light rather than a flat wash. */
+  .glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+  .glow--warm{width:760px;height:560px;left:-160px;top:120px;background:rgba(188,80,18,.30)}
+  .glow--cool{width:720px;height:620px;right:-220px;top:-180px;background:rgba(36,126,131,.34)}
+  .glow--deep{width:900px;height:520px;left:120px;bottom:-320px;background:rgba(19,58,99,.55)}
+
+  /* The headline says protection *around* infrastructure. These concentric
+     arcs say the same thing without needing a caption. */
+  .rings{position:absolute;right:-170px;top:-150px;width:740px;height:740px;opacity:.5}
+  .grid{
+    position:absolute;inset:0;opacity:.05;
+    background-image:linear-gradient(rgba(255,255,255,.9) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.9) 1px,transparent 1px);
+    background-size:54px 54px;
+    mask-image:linear-gradient(180deg,#000 0%,transparent 58%);
+  }
+  .card > .layer{position:relative;z-index:2}
+
+  /* Header ---------------------------------------------------------------- */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .top img{height:56px;width:auto;display:block}
+  .pill{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--teal-300);border:1px solid rgba(142,210,213,.32);
+    background:rgba(36,126,131,.12);
+    padding:8px 16px;border-radius:999px;white-space:nowrap;
+  }
+  .bar{display:flex;height:4px;margin-top:30px;border-radius:3px;overflow:hidden}
+  .bar i{flex:1}
+  .bar i:nth-child(1){background:var(--navy-600)}
+  .bar i:nth-child(2){background:var(--orange)}
+  .bar i:nth-child(3){background:var(--teal)}
+
+  /* Statement ------------------------------------------------------------- */
+  h1{
+    font-family:var(--display);font-weight:300;font-size:63px;line-height:1.06;
+    letter-spacing:-.026em;margin-top:34px;max-width:17.5ch;
+    font-variation-settings:'opsz' 72;
+  }
+  h1 em{
+    font-style:normal;color:var(--orange-400);position:relative;white-space:nowrap;
+  }
+  h1 em::after{
+    content:'';position:absolute;left:.02em;right:.02em;bottom:.06em;height:3px;
+    background:linear-gradient(90deg,var(--orange),rgba(232,120,60,0));border-radius:2px;
+  }
+  .lede{
+    font-size:19px;line-height:1.55;font-weight:300;color:#C6D6E4;
+    margin-top:22px;max-width:60ch;
+  }
+  .lede b{font-weight:500;color:#EAF1F7}
+
+  /* Section labels -------------------------------------------------------- */
+  .label{
+    font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--dim);display:flex;align-items:center;gap:14px;
+  }
+  .label::after{content:'';height:1px;flex:1;
+    background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,0))}
+
+  /* What we protect ------------------------------------------------------- */
+  .protect{margin-top:32px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+  .chip{
+    font-size:15.5px;color:#DCE7F0;padding:8px 16px;border-radius:8px;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.115);
+    display:inline-flex;align-items:center;gap:9px;
+  }
+  .chip::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--brass)}
+
+  /* How we work ----------------------------------------------------------- */
+  .work{margin-top:34px}
+  .rows{margin-top:6px;position:relative}
+  /* One hairline running the length of the list: five parts, one system. */
+  .rows::before{
+    content:'';position:absolute;left:23px;top:14px;bottom:14px;width:1px;
+    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.16) 14%,
+               rgba(255,255,255,.16) 86%,rgba(255,255,255,0));
+  }
+  .row{
+    display:grid;grid-template-columns:47px 1fr;gap:20px;align-items:center;
+    padding:14px 0;position:relative;
+  }
+  .row + .row::after{
+    content:'';position:absolute;left:69px;right:0;top:0;height:1px;
+    background:rgba(255,255,255,.075);
+  }
+  .n{
+    font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.06em;
+    width:47px;height:31px;border-radius:8px;display:grid;place-items:center;
+    position:relative;z-index:1;
+  }
+  .row h2{
+    font-family:var(--display);font-size:25.5px;font-weight:500;line-height:1.25;
+    letter-spacing:-.01em;color:#fff;
+  }
+
+  .a-navy  .n{color:#AFCBE4;background:rgba(27,75,125,.30);border:1px solid rgba(127,165,198,.36)}
+  .a-teal  .n{color:var(--teal-300);background:rgba(36,126,131,.24);border:1px solid rgba(142,210,213,.34)}
+  .a-orange .n{color:var(--orange-400);background:rgba(188,80,18,.24);border:1px solid rgba(232,120,60,.36)}
+
+  /* Lenses ---------------------------------------------------------------- */
+  .lenses{
+    margin-top:26px;padding:16px 22px;border-radius:12px;
+    background:linear-gradient(90deg,rgba(255,255,255,.075),rgba(255,255,255,.028));
+    border:1px solid rgba(255,255,255,.115);
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;
+  }
+  .lenses b{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--dim);font-weight:400;
+  }
+  .lenses span{font-size:16px;color:#E4EDF4;display:inline-flex;align-items:center;gap:9px}
+  .lenses span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--teal-300)}
+
+  /* Footer ---------------------------------------------------------------- */
+  .foot{
+    margin-top:auto;padding-top:24px;border-top:1px solid rgba(255,255,255,.14);
+    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  }
+  .foot .tag{font-family:var(--display);font-size:19.5px;font-weight:300;color:#CBDBE8;
+    line-height:1.38;letter-spacing:-.006em}
+  .foot .right{text-align:right;display:grid;gap:7px;justify-items:end}
+  .foot .url{font-family:var(--mono);font-size:13.5px;letter-spacing:.04em;color:var(--orange-400);
+    white-space:nowrap}
+  .foot .new{
+    font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--dim);border:1px solid rgba(255,255,255,.14);padding:5px 12px;border-radius:999px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="glow glow--cool"></div>
+  <div class="glow glow--warm"></div>
+  <div class="glow glow--deep"></div>
+  <div class="grid"></div>
+
+  <svg class="rings" viewBox="0 0 740 740" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="r1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#8ED2D5" stop-opacity=".85"/>
+        <stop offset=".55" stop-color="#8ED2D5" stop-opacity=".12"/>
+        <stop offset="1" stop-color="#8ED2D5" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="r2" x1="1" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E8783C" stop-opacity=".7"/>
+        <stop offset=".6" stop-color="#E8783C" stop-opacity=".08"/>
+        <stop offset="1" stop-color="#E8783C" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <circle cx="370" cy="370" r="118" stroke="url(#r2)" stroke-width="1.5"/>
+    <circle cx="370" cy="370" r="182" stroke="url(#r1)" stroke-width="1.5"/>
+    <circle cx="370" cy="370" r="246" stroke="url(#r1)" stroke-width="1.25" stroke-dasharray="3 9"/>
+    <circle cx="370" cy="370" r="310" stroke="url(#r1)" stroke-width="1.25"/>
+    <circle cx="370" cy="370" r="368" stroke="url(#r2)" stroke-width="1" stroke-dasharray="2 12"/>
+    <circle cx="370" cy="370" r="7" fill="#E8783C" fill-opacity=".55"/>
+  </svg>
+
+  <div class="layer">
+    <div class="top">
+      <img src="/assets/img/logo-full-inverse.png" alt="Digital Trust Futures Foundation">
+      <span class="pill">Established 2026 · South Africa · NPC</span>
+    </div>
+    <div class="bar"><i></i><i></i><i></i></div>
+  </div>
+
+  <h1 class="layer">Digital public infrastructure is only as good as the <em>protection</em> around it.</h1>
+
+  <p class="lede layer">
+    A new independent, non-profit public-benefit foundation working on the safety, security,
+    rights and trustworthiness of the digital systems people <b>cannot opt out of</b> — across
+    Africa and the Global South.
+  </p>
+
+  <div class="protect layer">
+    <p class="label">What we protect</p>
+    <div class="chips">
+      <span class="chip">Digital identity</span>
+      <span class="chip">Payments</span>
+      <span class="chip">Health</span>
+      <span class="chip">Social protection</span>
+      <span class="chip">Data exchange</span>
+      <span class="chip">Public-service AI</span>
+    </div>
+  </div>
+
+  <div class="work layer">
+    <p class="label">How we work — five divisions</p>
+    <div class="rows">
+      <div class="row a-navy"><span class="n">01</span><h2>DPI Security, Safety and Trust Lab</h2></div>
+      <div class="row a-teal"><span class="n">02</span><h2>Open Digital Commons and Software Trust</h2></div>
+      <div class="row a-orange"><span class="n">03</span><h2>Digital Trust Policy and Evidence Centre</h2></div>
+      <div class="row a-navy"><span class="n">04</span><h2>Digital Trust Skills and Implementation Academy</h2></div>
+      <div class="row a-teal"><span class="n">05</span><h2>Public-Interest Cyber and Digital Safety Centre</h2></div>
+    </div>
+  </div>
+
+  <div class="lenses layer">
+    <b>Applied across all five</b>
+    <span>Human rights</span>
+    <span>Children &amp; young people</span>
+    <span>Civil society</span>
+  </div>
+
+  <div class="foot layer">
+    <p class="tag">Safe infrastructure. Trusted technology.<br>Inclusive digital futures.</p>
+    <div class="right">
+      <span class="new">Independent · Open by default</span>
+      <p class="url">digitaltrustfuturesfoundation.org</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

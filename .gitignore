@@ -37,3 +37,7 @@ Founder/
 # Node
 node_modules/
 dist/
+
+# Intermediate slide captures. The carousel PDF and the single card are the
+# deliverables; the per-slide PNGs are rebuilt by render-carousel.mjs.
+Social/carousel/

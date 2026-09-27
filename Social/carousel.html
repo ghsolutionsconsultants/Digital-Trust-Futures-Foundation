@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DTFF launch carousel</title>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<style>
+  :root{
+    --navy-600:#1B4B7D; --navy-300:#7FA5C6;
+    --orange:#BC5012; --orange-400:#E8783C;
+    --teal:#247E83; --teal-300:#8ED2D5;
+    --brass:#B08D57;
+    --paper:#F7F5F1; --mute:#A6BACB; --dim:#7C97AF;
+    --display:'Newsreader',Georgia,serif;
+    --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+    --W:1080px; --H:1350px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);-webkit-font-smoothing:antialiased;background:#050F1B}
+
+  /* One continuous canvas. Each slide is a 1080px window into it, so the
+     gradient, the ring system and the timeline run *through* the cuts instead
+     of restarting — that is what makes the swipe feel like one object. */
+  .strip{position:relative;height:var(--H);display:flex;overflow:hidden;color:var(--paper)}
+
+  .bg{position:absolute;inset:0;z-index:0}
+  .bg .wash{position:absolute;inset:0;
+    background:linear-gradient(101deg,#0E2A49 0%,#0A1F36 22%,#081A2D 48%,#0A1F36 72%,#0E2A49 100%)}
+  .glow{position:absolute;border-radius:50%;filter:blur(110px)}
+  .grid{position:absolute;inset:0;opacity:.05;
+    background-image:linear-gradient(rgba(255,255,255,.9) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.9) 1px,transparent 1px);
+    background-size:54px 54px;
+    mask-image:linear-gradient(180deg,#000 0%,#000 42%,transparent 88%)}
+
+  /* Timeline: one line for the whole deck, a node per slide. */
+  .track{position:absolute;left:0;right:0;bottom:96px;height:1px;
+    background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.17) 4%,
+               rgba(255,255,255,.17) 96%,rgba(255,255,255,0))}
+  .dots{position:absolute;left:70px;bottom:56px;display:flex;gap:9px;align-items:center}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22)}
+  .dots i.on{background:var(--orange-400);width:24px;border-radius:999px;
+    box-shadow:0 0 0 4px rgba(232,120,60,.14)}
+
+  .slide{position:relative;z-index:2;width:var(--W);height:var(--H);flex:none;
+    padding:62px 70px 132px;display:flex;flex-direction:column}
+
+  /* Slide furniture ------------------------------------------------------- */
+  .head{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:56px}
+  .head img{height:56px;width:auto;display:block}
+  .wordmark{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--dim)}
+  .count{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--dim)}
+  .count b{color:var(--paper);font-weight:500}
+  .pill{font-family:var(--mono);font-size:12.5px;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--teal-300);border:1px solid rgba(142,210,213,.32);background:rgba(36,126,131,.12);
+    padding:8px 16px;border-radius:999px;white-space:nowrap}
+  .bar{display:flex;height:4px;margin-top:28px;border-radius:3px;overflow:hidden;flex:none}
+  .bar i{flex:1}
+  .bar i:nth-child(1){background:var(--navy-600)}
+  .bar i:nth-child(2){background:var(--orange)}
+  .bar i:nth-child(3){background:var(--teal)}
+
+  .swipe{position:absolute;right:70px;bottom:52px;font-family:var(--mono);font-size:11.5px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+    display:flex;align-items:center;gap:10px}
+  .swipe svg{width:22px;height:9px;overflow:visible}
+
+  /* Type ------------------------------------------------------------------ */
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--orange-400);display:flex;align-items:center;gap:13px;margin-bottom:22px}
+  .kicker::before{content:'';width:26px;height:2px;background:var(--orange);border-radius:2px;flex:none}
+
+  h1{font-family:var(--display);font-weight:300;font-size:63px;line-height:1.06;
+    letter-spacing:-.026em;max-width:20ch;text-wrap:balance;font-variation-settings:'opsz' 72}
+  h2{font-family:var(--display);font-weight:300;font-size:55px;line-height:1.1;
+    letter-spacing:-.022em;max-width:21ch;text-wrap:balance;font-variation-settings:'opsz' 60}
+  em{font-style:normal;color:var(--orange-400)}
+  .tealtext{color:var(--teal-300)}
+  p.body{font-size:21.5px;line-height:1.56;font-weight:300;color:#C6D6E4;max-width:54ch;margin-top:24px}
+  .stage > :first-child{margin-top:0}
+  p.body + p.body{margin-top:18px}
+  p.body b{font-weight:500;color:#EAF1F7}
+  .stage{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+  .slide--cover .stage{justify-content:flex-end}
+  .mid{margin-top:auto;margin-bottom:auto}
+  .bottom{margin-top:auto}
+
+  /* Chips ----------------------------------------------------------------- */
+  .chips{display:flex;flex-wrap:wrap;gap:11px;margin-top:34px;max-width:58ch}
+  .chip{font-size:18px;color:#DCE7F0;padding:12px 20px;border-radius:9px;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);
+    display:inline-flex;align-items:center;gap:10px}
+  .chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--brass)}
+
+  /* Facts ----------------------------------------------------------------- */
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:38px;
+    background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.11);border-radius:12px;
+    overflow:hidden}
+  .facts div{background:#0A1F36;padding:20px 22px}
+  .facts dt{font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--dim);margin-bottom:7px}
+  .facts dd{font-size:20px;color:#EAF1F7;line-height:1.35}
+
+  /* Division rows --------------------------------------------------------- */
+  .rows{margin-top:30px;position:relative}
+  .rows::before{content:'';position:absolute;left:25px;top:18px;bottom:18px;width:1px;
+    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.17) 12%,
+               rgba(255,255,255,.17) 88%,rgba(255,255,255,0))}
+  .row{display:grid;grid-template-columns:51px 1fr;gap:24px;align-items:start;
+    padding:19px 0;position:relative}
+  .row + .row::after{content:'';position:absolute;left:75px;right:0;top:0;height:1px;
+    background:rgba(255,255,255,.075)}
+  .n{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.06em;
+    width:51px;height:33px;border-radius:8px;display:grid;place-items:center;margin-top:3px;
+    position:relative;z-index:1}
+  .row h3{font-family:var(--display);font-size:29px;font-weight:500;line-height:1.2;
+    letter-spacing:-.012em;color:#fff}
+  .row p{font-size:18px;line-height:1.5;color:var(--mute);margin-top:7px;max-width:50ch}
+  .a-navy .n{color:#AFCBE4;background:rgba(27,75,125,.32);border:1px solid rgba(127,165,198,.38)}
+  .a-teal .n{color:var(--teal-300);background:rgba(36,126,131,.26);border:1px solid rgba(142,210,213,.36)}
+  .a-orange .n{color:var(--orange-400);background:rgba(188,80,18,.26);border:1px solid rgba(232,120,60,.38)}
+
+  /* Commitments ----------------------------------------------------------- */
+  .commit{display:grid;gap:20px;margin-top:36px}
+  .commit article{padding:26px 28px;border-radius:14px;
+    background:linear-gradient(120deg,rgba(255,255,255,.072),rgba(255,255,255,.026));
+    border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--orange)}
+  .commit article:nth-child(2){border-left-color:var(--teal)}
+  .commit h3{font-family:var(--display);font-size:31px;font-weight:500;line-height:1.2;
+    color:#fff;letter-spacing:-.014em}
+  .commit p{font-size:18.5px;line-height:1.55;color:var(--mute);margin-top:10px;max-width:50ch}
+
+  /* Lenses ---------------------------------------------------------------- */
+  .lenses{margin-top:28px;padding:18px 24px;border-radius:12px;
+    background:linear-gradient(90deg,rgba(255,255,255,.075),rgba(255,255,255,.028));
+    border:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;align-items:center;
+    gap:11px 22px}
+  .lenses b{font-family:var(--mono);font-size:11.5px;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--dim);font-weight:400}
+  .lenses span{font-size:18px;color:#E4EDF4;display:inline-flex;align-items:center;gap:10px}
+  .lenses span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal-300)}
+
+  /* Quote slide ----------------------------------------------------------- */
+  .pull{font-family:var(--display);font-weight:300;font-size:48px;line-height:1.18;
+    letter-spacing:-.018em;max-width:23ch;text-wrap:balance;padding-left:30px;
+    border-left:3px solid var(--orange);font-variation-settings:'opsz' 48}
+
+  /* Close ----------------------------------------------------------------- */
+  .cta{display:grid;gap:14px;margin-top:38px}
+  .cta a{display:flex;align-items:center;gap:16px;padding:20px 24px;border-radius:12px;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);
+    text-decoration:none;color:#EAF1F7;font-size:19px}
+  .cta a .k{font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;
+    color:var(--dim);min-width:104px}
+  .cta a .v{font-family:var(--mono);font-size:18px;color:var(--orange-400);
+    overflow-wrap:anywhere}
+  .sign{margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.14);
+    font-size:18px;color:var(--mute);line-height:1.5}
+  .sign b{color:#EAF1F7;font-weight:500}
+  .tag{font-family:var(--display);font-size:23px;font-weight:300;color:#CBDBE8;
+    line-height:1.38;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="strip" id="strip"></div>
+
+<script>
+/* Content lives here so the deck can be re-worded without touching layout. */
+const SLIDES = [
+
+/* 01 — cover */`
+  <div class="head">
+    <img src="/assets/img/logo-full-inverse.png" alt="Digital Trust Futures Foundation">
+    <span class="pill">Established 2026</span>
+  </div>
+  <div class="bar"><i></i><i></i><i></i></div>
+  <div class="bottom">
+    <h1>Digital public infrastructure is only as good as the <em>protection</em> around it.</h1>
+    <p class="body">Introducing <b>Digital Trust Futures Foundation</b> — an independent,
+    non-profit public-benefit organisation for the digital systems people cannot opt out of.</p>
+  </div>
+`,
+
+/* 02 — the stakes */`
+  <p class="kicker">The stakes</p>
+  <h2>These are no longer government IT projects. They are how life works.</h2>
+  <p class="body">Identity, payments, health, social protection and data exchange now decide
+  whether a person can prove who they are, get paid, get treated or get help.</p>
+  <p class="body">When systems like these fail, the blast radius is not a customer base.
+  <b>It is a population.</b></p>
+  <div class="chips">
+    <span class="chip">Digital identity</span>
+    <span class="chip">Payments</span>
+    <span class="chip">Health</span>
+    <span class="chip">Social protection</span>
+    <span class="chip">Data exchange</span>
+    <span class="chip">Public-service AI</span>
+  </div>
+`,
+
+/* 03 — the gap */`
+  <p class="kicker">The gap</p>
+    <p class="pull">The people who build these systems are often the same people certifying
+    that they are safe.</p>
+    <p class="body">Vendors, implementers and platforms have real expertise. They also have
+    something to sell. Assurance from a party with a commercial stake in the answer is not
+    assurance — it is marketing with a methodology section.</p>
+    <p class="body">Countries deploying digital public infrastructure need a second opinion
+    that <b>nobody profits from</b>.</p>
+`,
+
+/* 04 — who we are */`
+  <p class="kicker">Who we are</p>
+  <h2>An independent, non-profit public-benefit foundation.</h2>
+  <p class="body">We work on the safety, security, rights and trustworthiness of digital public
+  infrastructure, digital public goods, open-source technology and AI-enabled public services.</p>
+  <div class="facts">
+    <div><dt>Established</dt><dd>2026</dd></div>
+    <div><dt>Registered</dt><dd>Non-profit company, South&nbsp;Africa</dd></div>
+    <div><dt>Where we work</dt><dd>Africa and the Global&nbsp;South</dd></div>
+    <div><dt>Mandate</dt><dd>Public interest, not commercial</dd></div>
+  </div>
+`,
+
+/* 05 — divisions 1-3 */`
+  <p class="kicker">How we work · Five divisions</p>
+  <h2>Assurance, code, evidence —</h2>
+  <div class="rows">
+    <div class="row a-navy"><span class="n">01</span><div>
+      <h3>DPI Security, Safety and Trust Lab</h3>
+      <p>Independent safeguards assurance for the systems that hold identity, money and entitlement.</p>
+    </div></div>
+    <div class="row a-teal"><span class="n">02</span><div>
+      <h3>Open Digital Commons and Software Trust</h3>
+      <p>Securing and sustaining the open-source code that public services quietly run on.</p>
+    </div></div>
+    <div class="row a-orange"><span class="n">03</span><div>
+      <h3>Digital Trust Policy and Evidence Centre</h3>
+      <p>Research that turns technical risk into evidence policymakers can act on.</p>
+    </div></div>
+  </div>
+`,
+
+/* 06 — divisions 4-5 + lenses */`
+  <p class="kicker">How we work · Five divisions</p>
+  <h2>— capability, and a safety net.</h2>
+  <div class="rows">
+    <div class="row a-navy"><span class="n">04</span><div>
+      <h3>Digital Trust Skills and Implementation Academy</h3>
+      <p>Building local capability with teams, rather than building their dependency on us.</p>
+    </div></div>
+    <div class="row a-teal"><span class="n">05</span><div>
+      <h3>Public-Interest Cyber and Digital Safety Centre</h3>
+      <p>Cyber support for civil society, defenders and journalists who cannot buy it commercially.</p>
+    </div></div>
+  </div>
+  <div class="lenses">
+    <b>Applied across all five</b>
+    <span>Human rights</span>
+    <span>Children &amp; young people</span>
+    <span>Civil society</span>
+  </div>
+  <p class="body">These are operating lenses, not an appendix. Every assessment asks who carries
+  the risk — and whether they can get a remedy when it goes wrong.</p>
+`,
+
+/* 07 — commitments */`
+  <p class="kicker">Two commitments, stated on day one</p>
+  <h2>How we intend to behave.</h2>
+    <div class="commit">
+      <article>
+        <h3>Independent by design</h3>
+        <p>We operate outside vendor, implementer and platform incentives. We do not sell the
+        systems we assess, and we will say so plainly when something is not safe.</p>
+      </article>
+      <article>
+        <h3>Open by default</h3>
+        <p>Our tools, research and frameworks are released as public goods under an open licence.
+        Fund the work once, and every country facing the same risk can use it.</p>
+      </article>
+    </div>
+`,
+
+/* 08 — honest note + CTA */`
+  <p class="kicker">One honest thing</p>
+  <h2>We are new.</h2>
+  <p class="body">We have a mandate, a method, and people who have spent careers on this.
+  What we do not have yet is a track record. <b>That gets built in public, starting now.</b></p>
+  <div class="cta">
+    <a><span class="k">Read</span><span class="v">digitaltrustfuturesfoundation.org/research</span></a>
+    <a><span class="k">Partner</span><span class="v">info@digitaltrustfuturesfoundation.org</span></a>
+  </div>
+  <p class="sign"><b>Godfrey Kutumela</b> — Executive Lead and Digital Trust Practitioner<br>
+  Digital Trust Futures Foundation NPC</p>
+  <p class="tag">Safe infrastructure. Trusted technology.<br>Inclusive digital futures.</p>
+`,
+];
+
+const W = 1080, N = SLIDES.length;
+const strip = document.getElementById('strip');
+strip.style.width = (W * N) + 'px';
+
+/* Continuous background, painted once across the whole strip. */
+const bg = document.createElement('div');
+bg.className = 'bg';
+bg.innerHTML = `
+  <div class="wash"></div>
+  <div class="grid"></div>
+  <div class="glow" style="width:1500px;height:900px;left:-400px;top:-260px;background:rgba(36,126,131,.30)"></div>
+  <div class="glow" style="width:1700px;height:1000px;left:${W*2.1}px;top:520px;background:rgba(188,80,18,.19)"></div>
+  <div class="glow" style="width:1800px;height:1100px;left:${W*4.4}px;top:-380px;background:rgba(27,75,125,.55)"></div>
+  <div class="glow" style="width:1600px;height:980px;left:${W*6.6}px;top:420px;background:rgba(36,126,131,.28)"></div>
+  <svg width="${W*N}" height="1350" style="position:absolute;inset:0;opacity:.6" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="ring" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8ED2D5" stop-opacity=".42"/>
+        <stop offset=".26" stop-color="#8ED2D5" stop-opacity=".62"/>
+        <stop offset=".5" stop-color="#E8783C" stop-opacity=".58"/>
+        <stop offset=".74" stop-color="#8ED2D5" stop-opacity=".62"/>
+        <stop offset="1" stop-color="#8ED2D5" stop-opacity=".42"/>
+      </linearGradient>
+    </defs>
+    ${[420, 780, 1140, 1500, 1860, 2220, 2580, 2940, 3300, 3660, 4020, 4380]
+      .map((r, i) => `<circle cx="${W*N/2}" cy="560" r="${r}" stroke="url(#ring)"
+           stroke-width="${i % 3 === 2 ? 1 : 1.4}"
+           ${i % 3 === 2 ? 'stroke-dasharray="3 11"' : ''}/>`).join('')}
+    <circle cx="${W*N/2}" cy="560" r="9" fill="#E8783C" fill-opacity=".5"/>
+  </svg>
+  <div class="track"></div>
+`;
+strip.appendChild(bg);
+
+const ARROW = `<svg viewBox="0 0 22 9" fill="none" stroke="currentColor" stroke-width="1.4"
+  stroke-linecap="round" stroke-linejoin="round"><path d="M0 4.5h20M16 1l4 3.5-4 3.5"/></svg>`;
+
+SLIDES.forEach((inner, i) => {
+  const s = document.createElement('section');
+  s.className = 'slide' + (i === 0 ? ' slide--cover' : '');
+  s.dataset.n = String(i + 1);
+
+  // Slides after the cover carry a compact header rather than the full logo.
+  const head = i === 0 ? '' : `
+    <div class="head">
+      <span class="wordmark">Digital Trust Futures Foundation</span>
+      <span class="count"><b>${String(i + 1).padStart(2, '0')}</b> / ${String(N).padStart(2, '0')}</span>
+    </div>
+    <div class="bar" style="margin-bottom:38px"><i></i><i></i><i></i></div>`;
+
+  const dots = `<div class="dots">${
+    SLIDES.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</div>`;
+  const foot = dots + (i < N - 1
+    ? `<div class="swipe">Swipe ${ARROW}</div>`
+    : `<div class="swipe">Read the papers ${ARROW}</div>`);
+
+  s.innerHTML = head + `<div class="stage">${inner}</div>` + foot;
+  strip.appendChild(s);
+});
+</script>
+</body>
+</html>
