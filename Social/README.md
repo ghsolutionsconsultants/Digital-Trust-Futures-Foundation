@@ -21,28 +21,31 @@ Slide content lives in the `SLIDES` array at the top of the `<script>`. Layout
 is shared, so re-wording a slide never disturbs the others.
 
 ```bash
-cd Social && DTFF_PUBLIC="$PWD/../react-app/public" node render-carousel.mjs
+npm run social --prefix react-app
 ```
 
-This writes `carousel/slide-01.png` … `slide-08.png` and assembles
+That regenerates both assets. The carousel step writes `carousel/slide-01.png` … `slide-08.png` and assembles
 `dtff-launch-carousel.pdf`. If a slide's content grows past its frame the
 renderer says which slide and by how much, and exits non-zero, rather than
 silently cropping.
 
-If you add or remove a slide, update `const N` in `render-carousel.mjs` — it
-refuses to run when the count disagrees with the page.
+If you add or remove a slide, update `const N` in
+`react-app/scripts/social-carousel.mjs` — it refuses to run when the count
+disagrees with the page.
 
 ## The single card
 
-```bash
-cd Social && DTFF_PUBLIC="$PWD/../react-app/public" node render.mjs
-```
-
-Same guard: it reports the content's bottom edge against the usable height and
+Same command regenerates it (`scripts/social-card.mjs`). Same guard: it reports the content's bottom edge against the usable height and
 fails if anything would be cut. It measures in-flow children only — the
 decorative glows bleed past the card on purpose.
 
+## Where the code lives
+
+The HTML for both assets is here; the renderers are in `react-app/scripts/`
+alongside `check.mjs` and `postbuild.mjs`, because that is where `puppeteer-core`
+resolves from.
+
 ## Requirements
 
-`react-app/node_modules` (for puppeteer-core) and Chrome. Set `CHROME_PATH` if
-Chrome is not at the macOS default location.
+`react-app/node_modules` (run `npm install --prefix react-app` once) and Chrome.
+Set `CHROME_PATH` if Chrome is not at the macOS default location.

@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build && node scripts/postbuild.mjs",
     "preview": "vite preview",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "social": "node scripts/social-card.mjs && node scripts/social-carousel.mjs"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",

@@ -14,14 +14,15 @@ import { join, extname, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const ROOT = process.env.DTFF_PUBLIC || join(here, '..', 'react-app', 'public');
+const SOCIAL = join(here, '..', '..', 'Social');
+const ROOT = process.env.DTFF_PUBLIC || join(here, '..', 'public');
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 8952;
 const W = 1080, H = 1350;
 const SCALE = 2;
 
 const TYPES = { '.css': 'text/css', '.woff2': 'font/woff2', '.png': 'image/png', '.jpg': 'image/jpeg' };
-const html = await readFile(join(here, 'carousel.html'), 'utf8');
+const html = await readFile(join(SOCIAL, 'carousel.html'), 'utf8');
 
 const server = createServer(async (req, res) => {
   const url = decodeURIComponent(req.url.split('?')[0]);
@@ -65,7 +66,7 @@ const overflow = await page.evaluate(() =>
     return { slide: i + 1, bottom: Math.round(bottom), limit: s.clientHeight - pad + 60 };
   }).filter((r) => r.bottom > r.limit));
 
-const dir = join(here, 'carousel');
+const dir = join(SOCIAL, 'carousel');
 await mkdir(dir, { recursive: true });
 
 const files = [];
@@ -90,7 +91,7 @@ const doc = `<!doctype html><meta charset="utf-8"><style>
 
 const pdfPage = await browser.newPage();
 await pdfPage.setContent(doc, { waitUntil: 'load' });
-const out = join(here, 'dtff-launch-carousel.pdf');
+const out = join(SOCIAL, 'dtff-launch-carousel.pdf');
 await pdfPage.pdf({ path: out, width: `${W}px`, height: `${H}px`, printBackground: true, pageRanges: `1-${N}` });
 
 await browser.close();

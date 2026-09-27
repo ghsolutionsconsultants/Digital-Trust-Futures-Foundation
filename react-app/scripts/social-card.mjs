@@ -12,16 +12,15 @@ import { join, extname, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const PUBLIC = join(here, '..', '..', '..', '..', '..', '..',
-  'Users', 't', 'Claude Projects', 'Digital Trust Future Foundation ', 'react-app', 'public');
-const ROOT = process.env.DTFF_PUBLIC || PUBLIC;
+const SOCIAL = join(here, '..', '..', 'Social');
+const ROOT = process.env.DTFF_PUBLIC || join(here, '..', 'public');
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 8951;
 const W = 1080, H = 1350;
 
 const TYPES = { '.css': 'text/css', '.woff2': 'font/woff2', '.png': 'image/png', '.jpg': 'image/jpeg' };
 
-const html = await readFile(join(here, 'launch-card.html'), 'utf8');
+const html = await readFile(join(SOCIAL, 'launch-card.html'), 'utf8');
 
 const server = createServer(async (req, res) => {
   const url = decodeURIComponent(req.url.split('?')[0]);
@@ -61,7 +60,7 @@ const fit = await page.evaluate(() => {
   return { h, overflow: Math.max(0, h - (c.clientHeight - pad)) };
 });
 
-const out = join(here, 'dtff-launch-infographic.png');
+const out = join(SOCIAL, 'dtff-launch-infographic.png');
 await page.screenshot({ path: out, type: 'png' });
 await browser.close();
 server.close();
