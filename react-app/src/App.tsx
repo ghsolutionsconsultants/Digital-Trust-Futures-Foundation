@@ -10,6 +10,7 @@ import WhatWeDo from './pages/WhatWeDo';
 import DivisionPage from './pages/divisions/DivisionPage';
 import Programmes from './pages/Programmes';
 import Research from './pages/Research';
+import InsightArticle from './pages/InsightArticle';
 import GetInvolved from './pages/GetInvolved';
 import OpenSource from './pages/OpenSource';
 import SupportOurWork from './pages/SupportOurWork';
@@ -64,6 +65,7 @@ const router = createBrowserRouter([
       { path: 'divisions/:slug', element: <DivisionPage /> },
       { path: 'programmes', element: <Programmes /> },
       { path: 'research', element: <Research /> },
+      { path: 'research/:slug', element: <InsightArticle /> },
       { path: 'get-involved', element: <GetInvolved /> },
       { path: 'open-source', element: <OpenSource /> },
       { path: 'support-our-work', element: <SupportOurWork /> },

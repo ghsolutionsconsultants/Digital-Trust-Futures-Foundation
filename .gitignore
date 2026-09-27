@@ -24,6 +24,12 @@ __pycache__/
 files.zip
 WhatsApp Image*.jpeg
 
+# Source papers. Insights/ holds the Nucleus-branded originals alongside the
+# rebranded masters; the repository is published, so the originals stay local.
+# The versions the site serves are committed under
+# react-app/public/assets/papers/.
+Insights/
+
 # Founder photography — original high-resolution source. The derived signature
 # avatar in website/assets/img/signature/ is committed; the 12 MB original is not.
 Founder/

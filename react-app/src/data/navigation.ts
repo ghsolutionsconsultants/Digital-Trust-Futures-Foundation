@@ -55,6 +55,7 @@ export const NAV: NavItem[] = [
     key: 'research',
     children: [
       { label: 'Publications & policy briefs', href: '/research', desc: 'Evidence, briefs and country studies' },
+      { label: 'Digital Sovereignty series', href: '/research#insights', desc: 'Six-part policy series on control, trust and resilience' },
       { label: 'Toolkits & frameworks', href: '/research#toolkits', desc: 'Open, reusable assurance tools' },
       { label: 'Open source', href: '/open-source', desc: 'Hosted projects and security advisories' },
     ],
@@ -106,6 +107,7 @@ export const FOOTER_COLS = [
     heading: 'Resources',
     links: [
       { label: 'Publications & briefs', href: '/research' },
+      { label: 'Digital Sovereignty series', href: '/research#insights' },
       { label: 'Toolkits & frameworks', href: '/research#toolkits' },
       { label: 'Open-source projects', href: '/open-source' },
       { label: 'Security advisories', href: '/open-source#advisories' },

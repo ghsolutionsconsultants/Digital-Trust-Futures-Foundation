@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dtff-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "react-app", "--", "--port", "5177", "--strictPort"],
+      "port": 5177
+    }
+  ]
+}

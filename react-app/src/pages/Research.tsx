@@ -1,7 +1,21 @@
+import { Link } from 'react-router-dom';
 import { SeoHead } from '../components/ui/SeoHead';
 import { PageHero, CtaBand } from '../components/ui/PageHero';
+import { ArrowIcon, Icon } from '../components/ui/Icon';
+import {
+  INSIGHTS, SERIES_LENGTH, SERIES_NAME, SERIES_SUB, readingMinutes,
+} from '../data/insights';
 
-const RESOURCES = [
+interface Resource {
+  title: string; rtype: string; tags: string; desc: string;
+  status: string; div: string;
+  /** Present once the item is actually readable on the site. */
+  href?: string;
+}
+
+const RESOURCES: Resource[] = [
+  { title: 'Real Digital Sovereignty Starts With Control', rtype: 'Policy paper', tags: 'dpi policy identity payments', desc: 'Article 1 of the Digital Sovereignty in Practice series. Defines digital sovereignty as demonstrated control and sets out the five pillars — architectural, data, operational, governance and security — with the five mistakes that create false confidence.', status: 'live', div: 'Policy and Evidence Centre', href: '/research/digital-sovereignty-starts-with-control' },
+  { title: 'The Cost of Illusory Sovereignty', rtype: 'Policy paper', tags: 'dpi policy opensource citizen identity', desc: 'Article 2 of the Digital Sovereignty in Practice series. Why false control becomes a material national risk across economic dependency, population-scale PII exposure, citizen trust and shared digital public goods ecosystems.', status: 'live', div: 'Policy and Evidence Centre', href: '/research/the-cost-of-illusory-sovereignty' },
   { title: 'DPI Security Assurance Framework and maturity model', rtype: 'Framework', tags: 'dpi ai identity payments', desc: "The Foundation's core assurance method: a maturity model and structured review approach for citizen-facing digital public infrastructure.", status: 'development', div: 'Assurance Lab' },
   { title: 'DPI Trust Assessment Toolkit', rtype: 'Toolkit', tags: 'dpi identity payments', desc: 'A practical toolkit for conducting a DPI trust readiness assessment, including scoping, evidence requests, interview guides and scoring.', status: 'development', div: 'DPI Trust Lab' },
   { title: 'Open-Source Project Security Baseline', rtype: 'Baseline', tags: 'opensource', desc: 'A minimum security baseline for public-interest open-source projects: repository hardening, release integrity, dependency handling and disclosure readiness.', status: 'development', div: 'Open Digital Commons' },
@@ -52,11 +66,52 @@ export default function Research() {
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Research and resources' }]}
         extra={
           <nav className="section-nav" data-section-nav="" aria-label="On this page">
-            <a href="#library">Resource library</a><a href="#toolkits">Toolkit programme</a>
+            <a href="#insights">Insight papers</a><a href="#library">Resource library</a>
+            <a href="#toolkits">Toolkit programme</a>
             <a href="#licensing">Licensing</a><a href="#citing">Citing our work</a>
           </nav>
         }
       />
+
+      <section className="section" id="insights">
+        <div className="container">
+          <div className="section-head section-head--wide" data-reveal="">
+            <p className="eyebrow eyebrow--teal">Insight papers</p>
+            <h2 className="balance">{SERIES_NAME}</h2>
+            <p style={{ maxWidth: '66ch' }}>
+              {SERIES_SUB}. {INSIGHTS.length} of {SERIES_LENGTH} articles are published and readable in
+              full on this site; the remainder follow through the year.
+            </p>
+          </div>
+
+          <div className="insight-grid" data-reveal="">
+            {INSIGHTS.map((a) => (
+              <article key={a.slug} className="insight-card">
+                <p className="insight-card__num">Article {a.number} of {SERIES_LENGTH}</p>
+                <h3 className="insight-card__title">
+                  <Link className="stretched" to={`/research/${a.slug}`}>{a.title}</Link>
+                </h3>
+                <p className="insight-card__sub">{a.subtitle}</p>
+                <p className="insight-card__desc">{a.standfirst}</p>
+                <div className="insight-card__foot">
+                  <time dateTime={a.published}>{a.publishedLabel}</time>
+                  <span>{readingMinutes(a)} min read</span>
+                  <a className="insight-card__pdf" href={a.pdf} download>
+                    <Icon name="download" /> PDF
+                  </a>
+                  <span className="insight-card__cta">Read in full<ArrowIcon /></span>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="note mt-7" data-reveal="">
+            <strong>Read in the browser, cite from anywhere.</strong> Every article is published as a web page
+            first, so it is searchable, linkable section by section, accessible to screen readers and readable
+            on a phone. A formatted PDF of each paper is offered on the article page for offline and print use.
+          </div>
+        </div>
+      </section>
 
       <section className="section" id="library">
         <div className="container">
@@ -79,7 +134,9 @@ export default function Research() {
                 <article key={r.title} className="res-item" data-tags={r.tags}>
                   <div className="res-meta">{r.rtype}<br />{r.div}</div>
                   <div>
-                    <h3 className="res-title">{r.title}</h3>
+                    <h3 className="res-title">
+                      {r.href ? <Link to={r.href}>{r.title}</Link> : r.title}
+                    </h3>
                     <p className="res-desc">{r.desc}</p>
                   </div>
                   <div className="res-status"><span className={`status status--${r.status}`}>{STATUS_LABEL[r.status]}</span></div>

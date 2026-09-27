@@ -1257,3 +1257,177 @@ select{appearance:none;
 a[href^="mailto:"]{overflow-wrap:anywhere}
 .link-arrow{flex-wrap:wrap;overflow-wrap:anywhere;min-width:0}
 .pathway .dot-list li,.pathway p{overflow-wrap:anywhere}
+
+/* ── 13. Long-form insight papers ────────────────────────────────────────── */
+
+/* Reading progress. Sits under the sticky header and only fills as the
+   article body scrolls, so it measures the read, not the whole document. */
+.read-progress{position:fixed;top:var(--header-h);left:0;right:0;height:2px;z-index:60;
+  pointer-events:none;background:transparent}
+.read-progress span{display:block;height:100%;transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--orange-600),var(--teal-500));
+  transition:transform .12s linear}
+@media (prefers-reduced-motion:reduce){.read-progress span{transition:none}}
+
+/* Paper titles run longer than a section heading, so the 20ch clamp that
+   suits the rest of the site would break them into a column. */
+.page-hero--paper h1{max-width:24ch}
+.page-hero--paper .lede{font-size:var(--step-2);color:#CBDBE8;font-weight:300}
+
+.paper-meta{display:flex;flex-wrap:wrap;gap:.4rem .75rem;margin-top:var(--sp-6);
+  font-family:var(--font-mono);font-size:var(--step--2);letter-spacing:.05em;color:#9FB6C9}
+.paper-meta strong{color:#DCE7F0;font-weight:500}
+.paper-meta > span:not(:last-child)::after{content:'·';margin-left:.75rem;color:var(--teal-500)}
+.paper-actions{margin-top:var(--sp-6)}
+
+.paper-layout{display:grid;gap:clamp(2rem,1rem + 3vw,3.5rem)}
+.paper-layout > *{min-width:0}
+@media (min-width:1080px){
+  .paper-layout{grid-template-columns:minmax(0,15rem) minmax(0,1fr)}
+  .paper-rail{position:sticky;top:calc(var(--header-h) + 2rem);align-self:start;
+    max-height:calc(100vh - var(--header-h) - 4rem);overflow-y:auto;
+    padding-right:.5rem;scrollbar-width:thin}
+}
+.paper-rail__head{margin-bottom:.9rem}
+
+.paper-toc{display:grid;border-left:1px solid var(--border)}
+.paper-toc a{display:block;padding:.5rem 0 .5rem 1rem;margin-left:-1px;
+  border-left:2px solid transparent;text-decoration:none;font-size:var(--step--1);
+  line-height:1.45;color:var(--text-3);
+  transition:color .18s var(--ease),border-color .18s var(--ease)}
+.paper-toc a:hover{color:var(--heading)}
+.paper-toc a[aria-current='true']{color:var(--heading);border-left-color:var(--accent);font-weight:550}
+
+.paper-rail__foot{margin-top:var(--sp-7);padding-top:var(--sp-5);border-top:1px solid var(--border)}
+.paper-series{list-style:none;margin:.9rem 0 0;padding:0;display:grid;gap:.5rem;
+  font-size:var(--step--2);line-height:1.45}
+.paper-series li{color:var(--text-3)}
+.paper-series a{color:var(--text-2);text-decoration:none}
+.paper-series a:hover{color:var(--accent-text)}
+.paper-series li[aria-current='true'] span{color:var(--heading);font-weight:600}
+.paper-series .is-upcoming{opacity:.5;font-style:italic}
+
+.paper-body{max-width:72ch}
+.standfirst{font-family:var(--font-display);font-size:var(--step-2);line-height:1.5;
+  font-weight:300;color:var(--text-2);font-variation-settings:'opsz' 40;
+  padding-bottom:var(--sp-6);border-bottom:1px solid var(--border);margin-bottom:var(--sp-7)}
+
+.paper-section + .paper-section{margin-top:clamp(2.75rem,2rem + 2.4vw,4.25rem)}
+.paper-section > h2{font-size:var(--step-3);color:var(--heading);
+  scroll-margin-top:calc(var(--header-h) + 2rem);margin-bottom:var(--sp-5)}
+.paper-section > h3{margin:2rem 0 .5rem;font-size:var(--step-1);color:var(--heading)}
+.paper-section > p{margin-bottom:1.15em}
+.paper-section > .lede{margin-bottom:1.3em}
+.paper-section > .callout,.paper-section > .table-wrap,
+.paper-section > .quote,.paper-section > .dot-list,
+.paper-section > .num-list{margin-block:var(--sp-6)}
+.paper-section{scroll-margin-top:calc(var(--header-h) + 1rem)}
+
+.paper-list li{font-size:var(--step-0);line-height:1.7;color:var(--text-2)}
+.num-list{list-style:none;counter-reset:n;display:grid;gap:.9rem;margin:0;padding:0}
+.num-list li{counter-increment:n;display:grid;grid-template-columns:auto 1fr;gap:.85rem;
+  align-items:start;font-size:var(--step-0);line-height:1.7;color:var(--text-2)}
+.num-list li::before{content:counter(n);font-family:var(--font-mono);font-size:var(--step--2);
+  font-weight:500;color:var(--accent-text);background:var(--tint-orange);
+  width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;
+  margin-top:.12em;flex:none}
+.num-list li strong,.paper-list li strong{color:var(--heading)}
+
+.paper-quote{font-size:var(--step-2);margin-block:var(--sp-7)}
+.paper-quote p{margin:0;color:inherit}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:var(--sp-7);
+  padding-top:var(--sp-6);border-top:1px solid var(--border)}
+.tag{padding:.3rem .75rem;border-radius:var(--radius-pill);background:var(--surface-2);
+  border:1px solid var(--border);font-family:var(--font-mono);font-size:var(--step--2);
+  letter-spacing:.06em;color:var(--text-3)}
+.paper-body > .cite-block{margin-top:var(--sp-6)}
+.paper-body > .note{margin-top:var(--sp-5)}
+
+/* Author ------------------------------------------------------------------ */
+.author-card{display:grid;gap:clamp(1.5rem,1rem + 2vw,2.75rem);align-items:start;
+  padding:clamp(1.6rem,1.2rem + 1.8vw,2.75rem);border-radius:var(--radius-l);
+  background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-1)}
+@media (min-width:760px){.author-card{grid-template-columns:auto minmax(0,1fr)}}
+.author-card__photo{width:clamp(110px,18vw,160px);height:auto;aspect-ratio:1;
+  border-radius:50%;object-fit:cover;object-position:top center;
+  background:var(--surface-2);border:1px solid var(--border)}
+.author-card h2{font-size:var(--step-2)}
+.author-card .mono-label{color:var(--accent-2-text)}
+
+/* Series navigation ------------------------------------------------------- */
+.series-nav{display:grid;gap:1.5rem;padding-top:var(--sp-6);border-top:1px solid var(--border)}
+@media (min-width:860px){
+  .series-nav{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:clamp(1.5rem,3vw,3rem);
+    align-items:center}
+  .series-nav__centre{border-inline:1px solid var(--border);
+    padding-inline:clamp(1.5rem,3vw,3rem);display:flex;justify-content:center}
+  .series-nav__end{display:flex;justify-content:flex-end}
+  .series-nav__end .series-card{text-align:right;align-items:flex-end}
+}
+.series-card{display:flex;flex-direction:column;gap:.3rem;text-decoration:none;color:inherit;
+  max-width:34ch}
+.series-card__label{opacity:.6}
+.series-card__title{font-family:var(--font-display);font-size:var(--step-1);color:var(--heading);
+  font-weight:500;line-height:1.3;transition:color .18s var(--ease)}
+.series-card__sub{font-size:var(--step--1);color:var(--text-3);line-height:1.5}
+.series-card:hover .series-card__title{color:var(--accent-text)}
+.series-card--centre{align-items:center;text-align:center}
+
+/* Insight cards on the research page -------------------------------------- */
+.insight-grid{display:grid;gap:clamp(1.25rem,.8rem + 1.6vw,2rem)}
+@media (min-width:820px){.insight-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.insight-card{position:relative;display:flex;flex-direction:column;gap:.85rem;
+  padding:clamp(1.4rem,1.1rem + 1.2vw,2rem);border-radius:var(--radius-l);
+  background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-1);
+  text-decoration:none;color:inherit;overflow:hidden;
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease),border-color .18s var(--ease)}
+.insight-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-2);border-color:var(--border-2)}
+.insight-card::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:var(--accent)}
+.insight-card:nth-child(even)::before{background:var(--accent-2)}
+.insight-card__num{font-family:var(--font-mono);font-size:var(--step--2);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-3)}
+.insight-card__title{font-family:var(--font-display);font-size:var(--step-2);line-height:1.22;
+  color:var(--heading);font-weight:500;letter-spacing:-.012em;
+  transition:color .18s var(--ease)}
+.insight-card:hover .insight-card__title{color:var(--accent-text)}
+.insight-card__sub{font-size:var(--step-0);color:var(--text-2);line-height:1.5}
+.insight-card__desc{font-size:var(--step--1);color:var(--text-3);line-height:1.65;margin-top:.1rem}
+.insight-card__foot{margin-top:auto;padding-top:1rem;display:flex;flex-wrap:wrap;
+  align-items:center;gap:.6rem 1rem;border-top:1px solid var(--border);
+  font-family:var(--font-mono);font-size:var(--step--2);color:var(--text-3)}
+.insight-card__cta{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;
+  color:var(--accent-text);font-family:var(--font-sans);font-weight:550;
+  font-size:var(--step--1);letter-spacing:0;white-space:nowrap}
+.insight-card__cta .arrow{transition:transform .18s var(--ease)}
+.insight-card:hover .insight-card__cta .arrow{transform:translateX(3px)}
+
+/* Print — the article should print as a clean paper ------------------------ */
+@media print{
+  .read-progress,.paper-rail,.series-nav,.paper-actions{display:none!important}
+  .paper-layout{display:block}
+  .paper-body{max-width:none}
+}
+
+/* Card-level links. The title covers the card so the whole surface is
+   clickable, while the PDF link stays above that overlay. */
+.insight-card__title a.stretched{color:inherit;text-decoration:none}
+.insight-card__title a.stretched::after{content:'';position:absolute;inset:0;z-index:0}
+.insight-card__pdf{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.35rem;
+  padding:.25rem .6rem;border-radius:var(--radius-pill);border:1px solid var(--border);
+  background:var(--surface-2);color:var(--text-2);text-decoration:none;
+  transition:border-color .18s var(--ease),color .18s var(--ease)}
+.insight-card__pdf:hover{border-color:var(--accent);color:var(--accent-text)}
+.insight-card__pdf svg{width:13px;height:13px}
+.insight-card__cta{position:relative;z-index:0}
+.insight-card p{margin:0}
+
+.paper-download{display:flex;flex-wrap:wrap;gap:1rem 1.5rem;align-items:center;
+  justify-content:space-between;margin-top:var(--sp-7);padding:1.25rem 1.4rem;
+  border-radius:var(--radius-l);background:var(--surface-2);border:1px solid var(--border)}
+.paper-download p{margin:0;font-size:var(--step--1);color:var(--text-2)}
+.paper-download .mono-label{margin-bottom:.3rem}
+
+/* A citation carries a full URL, which is one unbreakable token wide enough to
+   push the page sideways on a phone. Same treatment as mailto links above. */
+.cite-block code{overflow-wrap:anywhere}

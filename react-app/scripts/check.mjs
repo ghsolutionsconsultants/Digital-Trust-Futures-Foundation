@@ -42,6 +42,7 @@ const B = `http://localhost:${PORT}`;
 const ROUTES = ['/','/about','/human-rights','/civil-society','/children-young-people','/governance',
   '/what-we-do','/programmes','/research','/open-source','/get-involved','/support-our-work',
   '/news','/contact','/security','/credits','/divisions/dpi-trust-lab','/divisions/skills-academy',
+  '/research/digital-sovereignty-starts-with-control','/research/the-cost-of-illusory-sovereignty',
   '/legal/privacy','/legal/cookies','/legal/terms','/legal/safeguarding','/thank-you'];
 
 const results = [];
@@ -153,6 +154,53 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
   check('form redirect targets a real route (not a .html redirect)',
     !!form && form.redirect === `${SITE}/thank-you`, form?.redirect || 'missing');
 
+  // Insight papers read as web pages, not as a PDF shell.
+  {
+    const slug = '/research/the-cost-of-illusory-sovereignty';
+    await page.goto(B + slug, { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 700));
+    const a = await page.evaluate(() => ({
+      toc: document.querySelectorAll('.paper-toc a').length,
+      sections: document.querySelectorAll('.paper-section').length,
+      tables: document.querySelectorAll('.paper-body table').length,
+      words: (document.querySelector('.paper-body')?.innerText || '').split(/\s+/).length,
+      pdf: document.querySelector('a[href$=".pdf"]')?.getAttribute('href') || '',
+      h1: document.querySelectorAll('h1').length,
+    }));
+    check('insight article renders as HTML, not a PDF embed',
+      a.sections >= 6 && a.words > 2500 && a.tables === 2 && a.h1 === 1,
+      `${a.sections} sections, ${a.tables} tables, ${a.words} words`);
+    check('contents rail lists every major section', a.toc === 6, `${a.toc} entries`);
+
+    const pdfStatus = a.pdf ? (await fetch(B + a.pdf)).status : 0;
+    check('the offered PDF download is actually served', pdfStatus === 200, `${a.pdf} -> ${pdfStatus}`);
+
+    await page.evaluate(async () => {
+      // offsetTop is relative to the positioned .section ancestor, so it would
+      // land well short of the heading. Measure against the document instead.
+      const el = document.getElementById('shared-risk');
+      const y = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: y, behavior: 'instant' });
+      await new Promise(r => setTimeout(r, 600));
+    });
+    const current = await page.evaluate(() =>
+      document.querySelector('.paper-toc a[aria-current="true"]')?.getAttribute('href'));
+    check('contents rail tracks the section being read', current === '#shared-risk', current || 'none');
+
+    await page.goto(B + '/research', { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 700));
+    const cards = await page.evaluate(() => [...document.querySelectorAll('.insight-card')].map(c => ({
+      read: c.querySelector('.insight-card__title a')?.getAttribute('href'),
+      pdf: c.querySelector('.insight-card__pdf')?.getAttribute('href'),
+    })));
+    check('research page links to both published articles',
+      cards.length === 2 && cards.every(c => c.read?.startsWith('/research/')),
+      cards.map(c => c.read).join(' '));
+
+    const pdfs = await Promise.all(cards.map(c => c.pdf ? fetch(B + c.pdf).then(r => r.status) : 0));
+    check('each card offers a PDF that downloads', pdfs.every(s => s === 200), pdfs.join(','));
+  }
+
   // Legacy .html URLs from the previous static site — the email signature uses these.
   let redirected = 0;
   for (const [from, to] of [['/security.html','/security'], ['/legal/privacy.html','/legal/privacy'], ['/about.html','/about']]) {
@@ -161,6 +209,25 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
     if (new URL(page.url()).pathname === to) redirected++;
   }
   check('legacy .html URLs redirect to modern routes', redirected === 3, `${redirected}/3`);
+  await page.close();
+}
+
+// ── nothing scrolls sideways on a phone ──────────────────────────────────────
+{
+  const page = await browser.newPage();
+  await page.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
+  const wide = [];
+  for (const r of ['/', '/research', '/research/digital-sovereignty-starts-with-control',
+                   '/research/the-cost-of-illusory-sovereignty', '/about', '/support-our-work']) {
+    await page.goto(B + r, { waitUntil: 'networkidle0' });
+    await new Promise(x => setTimeout(x, 500));
+    const over = await page.evaluate(() => {
+      const d = document.documentElement;
+      return d.scrollWidth - d.clientWidth;
+    });
+    if (over > 0) wide.push(`${r} +${over}px`);
+  }
+  check('no horizontal overflow at 375px', wide.length === 0, wide.join(', '));
   await page.close();
 }
 
