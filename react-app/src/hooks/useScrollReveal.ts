@@ -26,7 +26,12 @@ export function useScrollReveal() {
             }
           });
         },
-        { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        // threshold must stay 0. A ratio threshold is a fraction of the
+        // *element*, so a section taller than roughly 12x the viewport can
+        // never satisfy 0.08 and would stay invisible for good — which is
+        // what happened to the article pages on a short window. rootMargin
+        // alone gives the "wait until it is properly on screen" feel.
+        { rootMargin: '0px 0px -12% 0px', threshold: 0 },
       );
 
       targets.forEach((el) => io.observe(el));

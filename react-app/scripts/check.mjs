@@ -43,6 +43,7 @@ const ROUTES = ['/','/about','/human-rights','/civil-society','/children-young-p
   '/what-we-do','/programmes','/research','/open-source','/get-involved','/support-our-work',
   '/news','/contact','/security','/credits','/divisions/dpi-trust-lab','/divisions/skills-academy',
   '/research/digital-sovereignty-starts-with-control','/research/the-cost-of-illusory-sovereignty',
+  '/research/cyberwar-makes-sovereignty-non-negotiable',
   '/legal/privacy','/legal/cookies','/legal/terms','/legal/safeguarding','/thank-you'];
 
 const results = [];
@@ -193,12 +194,26 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
       read: c.querySelector('.insight-card__title a')?.getAttribute('href'),
       pdf: c.querySelector('.insight-card__pdf')?.getAttribute('href'),
     })));
-    check('research page links to both published articles',
-      cards.length === 2 && cards.every(c => c.read?.startsWith('/research/')),
+    check('research page links to every published article',
+      cards.length === 3 && cards.every(c => c.read?.startsWith('/research/')),
       cards.map(c => c.read).join(' '));
 
     const pdfs = await Promise.all(cards.map(c => c.pdf ? fetch(B + c.pdf).then(r => r.status) : 0));
     check('each card offers a PDF that downloads', pdfs.every(s => s === 200), pdfs.join(','));
+  }
+
+  // Article 3 carries a grouped reference list, which nothing else does.
+  {
+    await page.goto(B + '/research/cyberwar-makes-sovereignty-non-negotiable', { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 700));
+    const refs = await page.evaluate(() => {
+      const sec = document.getElementById('references');
+      return sec ? { groups: sec.querySelectorAll('h3').length,
+                     entries: sec.querySelectorAll('li').length } : null;
+    });
+    check('article 3 renders its grouped reference list',
+      !!refs && refs.groups === 7 && refs.entries > 55,
+      refs ? `${refs.groups} groups, ${refs.entries} entries` : 'section missing');
   }
 
   // Legacy .html URLs from the previous static site — the email signature uses these.
@@ -241,6 +256,35 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
   }
   check('no horizontal overflow at 375px', wide.length === 0, wide.join(', '));
   await page.close();
+}
+
+// ── tall sections still reveal on a short window ─────────────────────────────
+// A ratio threshold on IntersectionObserver is a fraction of the element, so a
+// section taller than the viewport can fail to reach it and stay invisible.
+// The long article pages are where that bites, and only on short windows.
+{
+  const stuck = [];
+  for (const size of [{ width: 800, height: 600 }, { width: 375, height: 700 }]) {
+    const page = await browser.newPage();
+    await page.setViewport(size);
+    for (const r of ['/research/cyberwar-makes-sovereignty-non-negotiable',
+                     '/research/the-cost-of-illusory-sovereignty', '/']) {
+      await page.goto(B + r, { waitUntil: 'networkidle0' });
+      await new Promise(x => setTimeout(x, 400));
+      await page.evaluate(async () => {
+        const max = () => document.documentElement.scrollHeight - window.innerHeight;
+        let y = 0, guard = 0;
+        while (y < max() && guard++ < 900) { y = Math.min(y + 300, max()); window.scrollTo(0, y); await new Promise(r => setTimeout(r, 40)); }
+        await new Promise(r => setTimeout(r, 1800));
+      });
+      const faded = await page.evaluate(() =>
+        [...document.querySelectorAll('[data-reveal]')]
+          .filter(el => parseFloat(getComputedStyle(el).opacity) < 0.99 && el.getBoundingClientRect().height > 0).length);
+      if (faded) stuck.push(`${r} @${size.width}x${size.height}: ${faded}`);
+    }
+    await page.close();
+  }
+  check('tall sections reveal on short and phone-height windows', stuck.length === 0, stuck.join('; '));
 }
 
 await browser.close();
