@@ -5,10 +5,16 @@
  *    for. Making that a copy of index.html lets the router handle /about,
  *    /human-rights and the rest — without it, every route except / is a 404.
  *
- * 2. Sitemap. Generated from the real route list so it can never drift from
+ * 2. A real index.html at every route. The 404.html fallback renders correctly
+ *    in a browser, but Pages serves it with a 404 status — so crawlers saw a
+ *    404 for every page except the home page, and the sitemap advertised URLs
+ *    that answered 404. Writing the file at its own path makes Pages answer
+ *    200 and the router still takes over from there.
+ *
+ * 3. Sitemap. Generated from the real route list so it can never drift from
  *    what the router actually serves.
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -55,6 +61,16 @@ if (!existsSync(indexPath)) {
 
 writeFileSync(join(out, '404.html'), readFileSync(indexPath));
 console.log('postbuild: 404.html written as SPA fallback');
+
+let written = 0;
+for (const [route] of ROUTES) {
+  if (route === '/') continue;                       // already the build's own index.html
+  const dir = join(out, route.slice(1));
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, 'index.html'), readFileSync(indexPath));
+  written++;
+}
+console.log(`postbuild: ${written} route index.html files written (200 instead of 404)`);
 
 const today = new Date().toISOString().slice(0, 10);
 const urls = ROUTES.map(([path, freq, pri]) =>

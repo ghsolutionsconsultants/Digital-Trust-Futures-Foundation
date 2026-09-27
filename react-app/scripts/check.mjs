@@ -212,6 +212,18 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
   await page.close();
 }
 
+// ── every advertised URL is a real file, so Pages answers 200 not 404 ───────
+{
+  const sitemap = await readFile(join(ROOT, 'sitemap.xml'), 'utf8');
+  const paths = [...sitemap.matchAll(/<loc>[^<]*?\/\/[^/]+(\/[^<]*)<\/loc>/g)].map(m => m[1]);
+  const missing = [];
+  for (const path of paths) {
+    const file = path === '/' ? join(ROOT, 'index.html') : join(ROOT, path.slice(1), 'index.html');
+    try { await stat(file); } catch { missing.push(path); }
+  }
+  check(`all ${paths.length} sitemap URLs exist as real files`, missing.length === 0, missing.join(', '));
+}
+
 // ── nothing scrolls sideways on a phone ──────────────────────────────────────
 {
   const page = await browser.newPage();

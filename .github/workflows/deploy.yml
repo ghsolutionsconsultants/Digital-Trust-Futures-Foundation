@@ -64,6 +64,15 @@ jobs:
             fail=1
           fi
 
+          # Every URL the sitemap advertises must exist as a real file, or Pages
+          # serves the 404.html fallback with a 404 status and crawlers drop it.
+          while read -r loc; do
+            path="${loc#*://*/}"
+            [ "$path" = "$loc" ] && path=""
+            file="website/${path:+$path/}index.html"
+            [ -f "$file" ] || { echo "::error::sitemap advertises /$path but $file is missing"; fail=1; }
+          done < <(sed -n 's|.*<loc>\(.*\)</loc>.*|\1|p' website/sitemap.xml)
+
           # Stale pages from the previous static site must not linger.
           stale=$(ls website/*.html 2>/dev/null | grep -vE '/(index|404)\.html$' || true)
           if [ -n "$stale" ]; then
