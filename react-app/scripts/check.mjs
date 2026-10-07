@@ -43,7 +43,7 @@ const ROUTES = ['/','/about','/human-rights','/civil-society','/children-young-p
   '/what-we-do','/programmes','/research','/open-source','/get-involved','/support-our-work',
   '/news','/contact','/security','/credits','/divisions/dpi-trust-lab','/divisions/skills-academy',
   '/research/digital-sovereignty-starts-with-control','/research/the-cost-of-illusory-sovereignty',
-  '/research/cyberwar-makes-sovereignty-non-negotiable',
+  '/research/cyberwar-makes-sovereignty-non-negotiable','/research/sovereignty-by-design',
   '/legal/privacy','/legal/cookies','/legal/terms','/legal/safeguarding','/thank-you'];
 
 const results = [];
@@ -195,7 +195,7 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
       pdf: c.querySelector('.insight-card__pdf')?.getAttribute('href'),
     })));
     check('research page links to every published article',
-      cards.length === 3 && cards.every(c => c.read?.startsWith('/research/')),
+      cards.length === 4 && cards.every(c => c.read?.startsWith('/research/')),
       cards.map(c => c.read).join(' '));
 
     const pdfs = await Promise.all(cards.map(c => c.pdf ? fetch(B + c.pdf).then(r => r.status) : 0));
@@ -268,7 +268,7 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
     const page = await browser.newPage();
     await page.setViewport(size);
     for (const r of ['/research/cyberwar-makes-sovereignty-non-negotiable',
-                     '/research/the-cost-of-illusory-sovereignty', '/']) {
+                     '/research/sovereignty-by-design', '/']) {
       await page.goto(B + r, { waitUntil: 'networkidle0' });
       await new Promise(x => setTimeout(x, 400));
       await page.evaluate(async () => {

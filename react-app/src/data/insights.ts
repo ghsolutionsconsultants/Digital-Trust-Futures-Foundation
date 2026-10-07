@@ -999,9 +999,325 @@ const ARTICLE_3: Insight = {
   ],
 };
 
+/* ── Article 4 ──────────────────────────────────────────────────────────── */
+
+const LAYER_ROWS: string[][] = [
+  ['Governance', 'Legal basis, accountability, oversight, procurement controls, incident authority, audit rights.', 'Determines who actually owns the decisions, not just who operates the system day-to-day.'],
+  ['Trust', 'Identity, authentication, authorisation, consent, signing, key management.', 'The layer where data sovereignty is technically enforced or abandoned, depending on who holds the keys.'],
+  ['Data protection', 'Minimisation, purpose limitation, retention controls, encryption, privacy impact assessment.', 'Reduces the value and legal exposure of a breach, and underpins protection of personal information.'],
+  ['Platform security', 'Secure SDLC, API security, secrets management, logging, patching, vulnerability management.', 'Where supply chain risk inherited from digital public goods enters the system.'],
+  ['Operations', 'Monitoring, SOC workflows, incident response, backup and recovery, continuity, and third-party risk.', 'Determines whether operational sovereignty is real, or only a policy aspiration.'],
+  ['Ecosystem', 'Certification, onboarding controls, interoperability testing, fraud controls, provider offboarding.', 'The weakest participant in an interoperable network sets the practical security floor for everyone connected to it.'],
+];
+
+const ROADMAP_ROWS: string[][] = [
+  ['Immediate (0–6 months)', 'Conduct an architecture review to identify foreign single-vendor dependencies. Establish a data residency policy with a technical, not merely legal, enforcement plan. Define minimum domestic operational capability requirements. Inventory any AI components already embedded in deployed systems.', 'Architectural, Data'],
+  ['Short-term (6–18 months)', 'Build a domestic DPI operations team. Implement HSM-backed key management with domestic key custody. Establish tested offline operational procedures. Commission an independent security assessment.', 'Operational, Security'],
+  ['Medium-term (18–36 months)', 'Achieve software bill of materials (SBOM) compliance for all deployed open-source components. Establish a national CERT/CSIRT with a DPI-specific mandate. Develop regional data sovereignty agreements with neighbouring states. Establish AI governance policy for DPI-embedded AI.', 'Security, Governance'],
+  ['Long-term (36+ months)', 'Participate in regional shared infrastructure for resilience. Achieve a mature, independently verified DPI security maturity level. Establish domestic DPI security research capability. Contribute to international DPI security standards.', 'All five pillars'],
+];
+
+const REGIONAL_ROWS: string[][] = [
+  ['1. Governance and decision rights', 'Shared services can create uncertainty over who has authority during incidents, disputes, upgrades or emergency interventions.', 'Establish formal regional governance, clearly defined national decision rights, escalation procedures, voting or approval mechanisms, audit rights, and transparent accountability for shared infrastructure.'],
+  ['2. Data jurisdiction and cross-border access', 'Regional platforms may process, replicate or back up sensitive information across several jurisdictions with different legal and privacy requirements.', 'Define agreed data classifications, residency and transfer rules, permitted administrative access, cross-border disclosure procedures, logging requirements, and mechanisms for resolving conflicts between national laws.'],
+  ['3. Cryptographic trust and key custody', 'Centralising trust anchors or cryptographic keys can create a powerful regional point of dependency or compromise.', 'Use distributed or pooled key-management models with strong separation of duties, HSM-backed protection, national participation in key governance, dual control, auditable ceremonies, and tested revocation and recovery procedures.'],
+  ['4. Operational resilience and incident response', 'Smaller states may lack sufficient specialist capacity to monitor, investigate and recover from sophisticated attacks independently.', 'Establish shared SOC or CSIRT capabilities, common incident taxonomies, regional threat-intelligence exchange, coordinated exercises, minimum national response capability, and clear authority for cross-border incident coordination.'],
+  ['5. Supplier and technology dependency', 'Regional procurement can reduce cost but can also concentrate dependence on a single technology provider or architecture.', 'Use open standards, modular architectures, common exit clauses, source and configuration portability, interoperable alternatives, independent security assurance, and procurement structures that preserve switching and substitution options.'],
+];
+
+/** Each layer: what it covers, where sovereignty is won or lost, what proves it. */
+const LAYER_DETAIL: { name: string; covers: string; focus: string; evidence: string }[] = [
+  {
+    name: '01. Governance',
+    covers: 'Defines the legal and institutional authority for the DPI: mandate, ownership, accountability, oversight, procurement, audit rights, incident authority, and the rules governing outsourcing or shared infrastructure.',
+    focus: 'Decision rights must remain clear even when technology and operations are delegated. Contracts, laws and governance bodies should preserve the state’s ability to direct, inspect, challenge, replace and recover critical services.',
+    evidence: 'Named accountable owners; enforceable audit and access rights; incident decision authority; supplier exit and transition clauses; documented oversight and independent assurance.',
+  },
+  {
+    name: '02. Trust',
+    covers: 'Controls the roots of digital trust: identity proofing, authentication, authorisation, consent, digital signing and cryptographic key management that determine who or what is trusted across the ecosystem.',
+    focus: 'Control of keys, privileged identities and trust anchors determines whether technical sovereignty is real. Key generation, custody, rotation, recovery and revocation should not depend on an actor the country cannot independently govern.',
+    evidence: 'HSM-backed key custody; dual control and separation of duties; controlled privileged access; auditable trust-anchor changes; tested emergency revocation and recovery.',
+  },
+  {
+    name: '03. Data protection',
+    covers: 'Governs how personal and sensitive data is collected, used, shared, retained, encrypted and deleted, including minimisation, purpose limitation, residency, cross-border transfers and privacy impact assessment.',
+    focus: 'Sovereignty requires control over data throughout its lifecycle, not only where a database is hosted. Data flows, backups, replicas, support access and lawful cross-border disclosure pathways must be visible and governed.',
+    evidence: 'Data inventory and flow maps; classification and retention rules; encryption with controlled keys; privacy impact assessments; deletion controls; monitored cross-border and administrative access.',
+  },
+  {
+    name: '04. Platform security',
+    covers: 'Protects the software, APIs, infrastructure and supply chain that make DPI function, including secure SDLC, secrets, logging, patching, vulnerability management and dependency assurance for digital public goods and open-source components.',
+    focus: 'A country cannot claim meaningful control if it cannot verify what code is deployed, how it was built, what dependencies it contains, who can change it, and how vulnerabilities are found and remediated.',
+    evidence: 'Controlled source and CI/CD access; SBOM and provenance; signed build artefacts; API and secrets controls; vulnerability and patch evidence; independent code and architecture assurance.',
+  },
+  {
+    name: '05. Operations',
+    covers: 'Turns design into sustained capability through monitoring, SOC workflows, incident response, backup and recovery, continuity, administrative procedures, skills and third-party operational risk management.',
+    focus: 'Operational sovereignty is demonstrated when essential services can be monitored, defended, restored and safely operated even if a primary supplier, cloud service or external support team is unavailable.',
+    evidence: 'Domestic operating capability; independent telemetry and logs; tested incident runbooks; offline and degraded-mode procedures; recovery exercises; privileged-access oversight; continuity and supplier-failure tests.',
+  },
+  {
+    name: '06. Ecosystem',
+    covers: 'Extends sovereignty beyond the core platform to every connected participant through onboarding, certification, interoperability testing, fraud controls, interface requirements, continuous assurance and provider offboarding.',
+    focus: 'Interoperability distributes risk. The practical security floor is therefore set by the weakest connected participant or interface, making common minimum controls and enforceable participation rules essential.',
+    evidence: 'Common security baseline; pre-production interoperability tests; certification and periodic reassessment; fraud monitoring; dependency mapping; suspension and offboarding processes; evidence-sharing obligations.',
+  },
+];
+
+const ARTICLE_4: Insight = {
+  slug: 'sovereignty-by-design',
+  number: 4,
+  title: 'Sovereignty by Design',
+  subtitle: 'Building DPI architecture, roadmaps and regional resilience',
+  standfirst:
+    'Sovereignty cannot be bolted onto Digital Public Infrastructure after launch without cost, disruption and compromise. This article turns the policy debate into an architecture and implementation question, showing how countries can design sovereignty into DPI from the beginning and build it progressively through national and regional capability.',
+  published: '2026-10-01',
+  publishedLabel: '1 October 2026',
+  version: 'Series version 1.0',
+  classification: 'Public',
+  tags: ['Digital sovereignty', 'DPI', 'Architecture', 'Governance', 'Regional cooperation'],
+  filters: ['dpi', 'policy', 'identity', 'payments', 'opensource'],
+  pdf: '/assets/papers/dtff-digital-sovereignty-04-sovereignty-by-design.pdf',
+  sections: [
+    {
+      id: 'executive-summary',
+      title: 'Executive summary',
+      blocks: [
+        {
+          k: 'lede',
+          text:
+            'Digital Public Infrastructure is where digital sovereignty becomes a practical design problem. A national identity system, payment rail or data exchange layer is sovereign in practice only if its architecture, operations, governance, data controls and assurance model make control real before the system becomes nationally dependent. This article sets out a six-layer architecture for sovereignty-aware DPI, a realistic phased roadmap, and the role of regional cooperation in giving smaller and lower-capacity countries a credible route to meaningful control.',
+        },
+        { k: 'h3', text: 'Key points for policymakers and DPI leaders' },
+        {
+          k: 'ul',
+          items: [
+            'Security and sovereignty controls are cheaper and more effective when designed in before go-live.',
+            'DPI sovereignty requires governance, trust, data protection, platform security, operations and ecosystem controls to work together.',
+            'A credible roadmap is a 36-month-plus commitment, not a procurement milestone.',
+            'Regional infrastructure, shared CSIRT capacity and pooled assurance can turn sovereignty from aspiration into capability.',
+          ],
+        },
+        {
+          k: 'p',
+          text:
+            'The central argument is that sovereignty is not a hosting decision or a contractual promise. It is the cumulative result of choices about key custody, administrative access, logging, code control, independent assurance and exit options. When countries leave those choices to vendors or defer them until after launch, they inherit dependencies that are **costly to unwind and hard to see.**',
+        },
+        {
+          k: 'p',
+          text:
+            'Progress is therefore best measured in verified capability rather than declared intent. The roadmap in this article moves from immediate visibility of dependencies, through domestic operational control and independent assurance, to long-term regional resilience. For countries that cannot build every capability alone, regional cooperation offers a practical way to share cost and expertise while retaining national accountability for laws, data protection and security thresholds.',
+        },
+        { k: 'h3', text: 'Key takeaways' },
+        {
+          k: 'p',
+          text:
+            'For policymakers, this means writing sovereignty requirements into legal mandates, procurement terms and funding conditions before signing contracts. For DPI leaders, it means building the domestic skills, operating procedures and assurance relationships that turn those requirements into everyday practice. Neither group can deliver this alone, so sustained coordination among policy, technical and regional actors is essential.',
+        },
+        {
+          k: 'ol',
+          items: [
+            'Treat sovereignty as an architectural requirement from day one, because every control deferred past go-live becomes harder, costlier and less complete to retrofit.',
+            'Anchor control in the trust layer, since whoever holds the keys, administers the environment and sees the logs ultimately determines whether data sovereignty is real.',
+            'Measure progress through independent assessment rather than policy statements, so that the gap between declared and actual sovereignty narrows instead of widening over time.',
+          ],
+        },
+        {
+          k: 'p',
+          text:
+            'Sovereignty by design is ultimately a discipline of sustained, verifiable choices rather than a single procurement or policy event. Countries that embed control early, build domestic and regional capability in deliberate phases, and test their assumptions independently will be far better placed to protect citizens and sustain trust in national systems.',
+        },
+      ],
+    },
+    {
+      id: 'designed-in',
+      title: '1. Sovereignty must be designed in at the architecture stage',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'Sovereignty controls retrofitted after national systems go live are usually more expensive, more disruptive and less complete than controls embedded at design time. Once identity, payment, social protection or data exchange systems are widely integrated, later controls must work around existing dependencies, data flows, operational habits and vendor relationships.',
+        },
+      ],
+    },
+    {
+      id: 'six-layer-architecture',
+      title: '2. A six-layer sovereignty-aware DPI architecture',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'A complete DPI sovereignty posture is not a single product. It is an architecture of mutually reinforcing controls. The six layers below show where sovereignty decisions are made, and where false confidence usually enters if one layer is treated as sufficient on its own.',
+        },
+        {
+          k: 'table',
+          head: ['Layer', 'What it covers', 'Sovereignty relevance'],
+          rows: LAYER_ROWS,
+          caption: 'The six layers, and what each one decides about control.',
+        },
+        {
+          k: 'p',
+          text:
+            'Designing sovereignty in means asking hard questions early: who holds keys, who can administer the environment, who can see logs, who can change code, who verifies security, what happens if the primary vendor is unavailable, how cross-border access is controlled, and how citizens are protected when systems fail.',
+        },
+        {
+          k: 'p',
+          text:
+            'The key design principle is **federation over unnecessary centralisation**. Monolithic DPI designs can concentrate risk and create single points of failure. Modular, federated and segmented architectures reduce lateral movement, limit blast radius, and allow individual components to fail or be replaced without collapsing the wider national system.',
+        },
+      ],
+    },
+    {
+      id: 'six-layers-detail',
+      title: '2.1 The six layers in detail',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'The six layers operate as one sovereignty control system. Each layer answers a different question about who can decide, who can technically exercise control, and whether that control remains effective during normal operations, disruption, vendor failure or cross-border dependence.',
+        },
+        ...LAYER_DETAIL.flatMap((l): Block[] => [
+          { k: 'h3', text: l.name },
+          { k: 'p', text: l.covers },
+          { k: 'p', text: `**Sovereignty focus.** ${l.focus}` },
+          { k: 'p', text: `**Evidence of control.** ${l.evidence}` },
+        ]),
+        {
+          k: 'callout',
+          tone: 'teal',
+          title: 'The design test',
+          paras: [
+            'For each layer, leaders should be able to identify the accountable authority, the technical control point, the evidence that proves control, and the recovery or exit path if a dependency fails. A gap in any one of these four elements can undermine the sovereignty of the whole DPI ecosystem.',
+          ],
+        },
+        {
+          k: 'p',
+          text:
+            'Effective sovereignty depends on these layers reinforcing one another, because strong control in one area cannot compensate for critical dependency or weakness in another.',
+        },
+        {
+          k: 'p',
+          text:
+            'The objective is therefore not national self-sufficiency in every technology, but verifiable authority, meaningful technical control, operational resilience and credible alternatives when dependencies fail or become unacceptable. When these conditions are designed, tested and independently assured across all six layers, DPI becomes more resilient, accountable and capable of sustaining national control while still benefiting from regional cooperation and global technology ecosystems.',
+        },
+      ],
+    },
+    {
+      id: 'phased-roadmap',
+      title: '3. A phased sovereignty roadmap',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'Digital sovereignty is built progressively, not delivered as a single technology programme or procurement outcome. Countries typically begin with a mixture of domestic capability, foreign technology, external expertise, legacy platforms and regional dependencies. The practical objective is therefore to understand those dependencies and deliberately increase the areas where national authorities can govern, operate, verify, recover and make independent decisions over time.',
+        },
+        {
+          k: 'p',
+          text:
+            'The sequencing matters. Trying to localise every component immediately can increase cost and complexity without necessarily improving control, while delaying critical capabilities such as key custody, operational visibility, independent assurance and recovery can create dependencies that become difficult to reverse. No country achieves full sovereignty at go-live, so a credible plan should distinguish immediate visibility, short-term operational capability, medium-term assurance and long-term resilience.',
+        },
+        {
+          k: 'table',
+          head: ['Timeframe', 'Priority actions', 'Sovereignty dimension'],
+          rows: ROADMAP_ROWS,
+          caption: 'A phased roadmap, sequenced so that deferred controls do not become irreversible.',
+        },
+        {
+          k: 'callout',
+          title: 'No country achieves sovereignty at go-live',
+          paras: [
+            'The roadmap above is a 36-month-plus commitment requiring sustained political will, continuous investment in domestic capability, and the institutional honesty to commission independent assessments that may surface uncomfortable findings.',
+            'Countries that treat sovereignty as a procurement outcome rather than an operational discipline will find the gap between declared and actual sovereignty widening over time, not closing.',
+          ],
+        },
+        {
+          k: 'p',
+          text:
+            'The roadmap should be treated as a capability-building journey rather than a fixed implementation schedule. Measure progress by demonstrable increases in control, resilience, domestic competence, independent assurance and credible exit options, with each phase reducing dependencies that could materially constrain national decision-making or the continuity of essential digital services.',
+        },
+      ],
+    },
+    {
+      id: 'regional-architecture',
+      title: '4. Regional and shared sovereignty architecture',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'For many smaller and lower-capacity countries, the most realistic path to meaningful digital sovereignty is regional rather than purely national. Building every critical capability independently can be prohibitively expensive, difficult to staff and inefficient to sustain. Shared infrastructure, pooled cryptographic and assurance capability, common procurement standards, regional threat intelligence and shared Computer Security Incident Response Team capacity can give participating countries access to capabilities that would otherwise be out of reach.',
+        },
+        {
+          k: 'p',
+          text:
+            'Regional sovereignty should therefore be understood as **shared capability without surrendered accountability**. National authorities should retain responsibility for laws, citizen rights, data protection requirements, security thresholds and critical decision-making, while selected technical and operational capabilities can be jointly delivered where this improves resilience, affordability and bargaining power. The objective is not to replace national sovereignty with regional control, but to strengthen national authority through trusted shared mechanisms, transparent governance, enforceable participation rules and independently verifiable safeguards.',
+        },
+        {
+          k: 'p',
+          text:
+            'The design challenge is consequently not a binary choice between “national” and “foreign” infrastructure. A stronger model combines domestic authority, regional capability, open standards, interoperable architecture and carefully governed use of global technology, so that no single government, supplier, cloud provider or regional institution becomes an uncontested point of control. The central test is whether each country can understand its dependencies, influence the shared environment, independently verify its protections, and maintain continuity or exit if the arrangement no longer meets national requirements.',
+        },
+        {
+          k: 'table',
+          head: ['Key issue', 'Regional sovereignty consideration', 'Practical design requirement'],
+          rows: REGIONAL_ROWS,
+          caption: 'Five issues any regional arrangement has to settle explicitly.',
+        },
+        {
+          k: 'p',
+          text:
+            'A mature regional model should be judged not by how much infrastructure is shared, but by whether sharing increases each participating country’s practical control and resilience. Regional arrangements should make countries less vulnerable to single-vendor dependence, skills shortages, fragmented security capability and unequal negotiating power, while preserving the ability of national authorities to enforce their own legal and policy requirements.',
+        },
+        {
+          k: 'ol',
+          items: [
+            '**Share capability, not accountability.** Regional infrastructure can be jointly operated, but responsibility for citizen protection, national law and sovereign decision-making should remain clearly assigned.',
+            '**Design for reversibility.** Every shared arrangement should include interoperability, portability, recovery, substitution and exit mechanisms so cooperation does not become irreversible dependency.',
+            '**Verify regional trust continuously.** Common controls, independent assurance, joint exercises and transparent evidence should demonstrate that shared sovereignty arrangements remain effective as technology, suppliers, risks and political relationships change.',
+          ],
+        },
+        {
+          k: 'p',
+          text:
+            'Regional sovereignty works best when cooperation strengthens, rather than dilutes, national control. The goal is to create shared capability that expands resilience, technical depth and strategic choice while preserving clear accountability at country level. Done well, regional architecture turns sovereignty from an expensive aspiration into a practical, scalable and independently verifiable operating model.',
+        },
+      ],
+    },
+    {
+      id: 'references',
+      title: 'References and further reading',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'This list is organised by institutional category to help readers navigate quickly to the type of source most relevant to their work. It reflects the regulatory and threat landscape as understood at the time of writing, and should be revisited periodically: several of the instruments listed remain subject to active negotiation and change.',
+        },
+        ...REFERENCES.flatMap((g): Block[] => [
+          { k: 'h3', text: g.heading },
+          { k: 'ul', items: g.items },
+        ]),
+      ],
+    },
+    {
+      id: 'series-bridge',
+      title: 'Series bridge',
+      minor: true,
+      blocks: [
+        {
+          k: 'callout',
+          title: 'What comes next in the series',
+          paras: [
+            'The next article addresses the most common implementation trap in this area: assuming that data is sovereign because it is hosted locally. It connects data protection law, protection of personal information, and the risk of extraterritorial access.',
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 /* ── Registry ───────────────────────────────────────────────────────────── */
 
-export const INSIGHTS: Insight[] = [ARTICLE_1, ARTICLE_2, ARTICLE_3];
+export const INSIGHTS: Insight[] = [ARTICLE_1, ARTICLE_2, ARTICLE_3, ARTICLE_4];
 
 export const INSIGHT_BY_SLUG: Record<string, Insight> = Object.fromEntries(
   INSIGHTS.map((a) => [a.slug, a]),

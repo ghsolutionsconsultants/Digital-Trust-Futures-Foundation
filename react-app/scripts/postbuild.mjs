@@ -39,6 +39,7 @@ const ROUTES = [
   ['/research/digital-sovereignty-starts-with-control', 'yearly', '0.8'],
   ['/research/the-cost-of-illusory-sovereignty', 'yearly', '0.8'],
   ['/research/cyberwar-makes-sovereignty-non-negotiable', 'yearly', '0.8'],
+  ['/research/sovereignty-by-design', 'yearly', '0.8'],
   ['/open-source', 'monthly', '0.7'],
   ['/civil-society', 'monthly', '0.9'],
   ['/children-young-people', 'monthly', '0.9'],
