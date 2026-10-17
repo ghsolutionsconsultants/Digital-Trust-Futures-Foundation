@@ -29,7 +29,10 @@ export interface Section {
 
 export interface Insight {
   slug: string;
-  number: number;
+  /** Series articles are numbered and carry a bridge; perspectives are not. */
+  kind?: 'series' | 'perspective';
+  /** Series articles only. */
+  number?: number;
   title: string;
   subtitle: string;
   /** Opens the page and doubles as the meta description. */
@@ -49,6 +52,7 @@ export const SERIES_NAME = 'Digital Sovereignty in Practice';
 export const SERIES_SUB =
   'A policy series on control, trust and resilience in the cloud era';
 export const SERIES_LENGTH = 6;
+export const PERSPECTIVE_LABEL = 'DTFF Perspective';
 
 export const AUTHOR = {
   name: 'Godfrey Kutumela',
@@ -1315,9 +1319,160 @@ const ARTICLE_4: Insight = {
   ],
 };
 
+/* ── Perspective: cross-border digital identity ─────────────────────────── */
+
+const PERSPECTIVE_1: Insight = {
+  slug: 'making-digital-identity-work-across-borders',
+  kind: 'perspective',
+  title: 'Making Digital Identity Work Across Borders',
+  subtitle: 'What has to be agreed before one country can rely on another’s credentials',
+  standfirst:
+    'Cross-border digital identity should make it easier for people to access services and demonstrate legitimate credentials without repeatedly surrendering personal information. Its success depends on whether an institution in one country can lawfully and confidently rely on evidence issued in another. Connecting databases is only part of the task. Governments must also agree what a credential proves, who may use it, who answers for mistakes, and how people recover when verification fails.',
+  published: '2026-10-15',
+  publishedLabel: 'October 2026',
+  version: '',
+  classification: 'Public',
+  tags: ['Digital identity', 'Cross-border', 'Interoperability', 'Inclusion', 'Accountability'],
+  filters: ['identity', 'dpi', 'policy', 'citizen', 'rights'],
+  pdf: '/assets/papers/dtff-perspective-making-digital-identity-work-across-borders.pdf',
+  sections: [
+    {
+      id: 'opportunity-for-africa',
+      title: 'The opportunity for Africa',
+      blocks: [
+        {
+          k: 'lede',
+          text:
+            'For Africa, this is an opportunity to improve access for migrants, traders and mobile workers while strengthening institutional accountability. The practical starting point is a limited set of useful services, supported by clear rules and independent assurance. A system should earn wider acceptance through evidence of security, inclusion and operational reliability.',
+        },
+      ],
+    },
+    {
+      id: 'trust-travels',
+      title: 'Trust must travel with the credential',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'Interoperability has legal, regulatory, organisational, technical and operational dimensions. A working interface does not establish permission to share data or rely on a foreign identity. Compatible formats do not guarantee equivalent enrolment checks, authentication strength or institutional oversight. Participants need a common understanding of assurance, supported by evidence about how credentials are issued, protected, updated and revoked.',
+        },
+        {
+          k: 'p',
+          text:
+            'Identification, authentication and authorisation must also remain distinct. Establishing identity does not establish permission to enter a country, practise a profession or receive a particular service. Likewise, a verified identity is only one part of financial due diligence. It does not automatically establish beneficial ownership, source of funds or other information a regulated institution must assess. Each service should specify the attributes it needs and the decisions that remain its responsibility.',
+        },
+      ],
+    },
+    {
+      id: 'useful-services',
+      title: 'Build around useful services',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'Travel documents, health credentials, financial onboarding and professional qualifications illustrate different reasons to recognise identity across borders. Their requirements should not be forced into one model. A border authority needs different evidence from a remittance provider or an employer checking a qualification. More sensitive uses, including policing and personnel vetting, require particularly strong legal justification, accuracy controls, and due process.',
+        },
+        {
+          k: 'p',
+          text:
+            'Passports, national identity systems, wallets and visas should evolve coherently while retaining distinct functions. A passport supports evidence of nationality and identity for travel; a visa records permission granted by the destination. A wallet can carry credentials issued by different authorities, but cannot make them legally interchangeable. The goal should be compatible trust mechanisms and clearly assigned authority, with separate permissions and data use for each service.',
+        },
+        {
+          k: 'p',
+          text:
+            'A focused corridor between willing countries can test these arrangements before wider expansion. The pilot should address a genuine user problem, involve institutions authorised to act, and measure improvements against existing practice. Bilateral implementation can generate lessons for a broader trust framework, while legal recognition and liability arrangements must be settled before live reliance begins. Regional agreements can then extend proven arrangements rather than attempt to resolve every use case at once.',
+        },
+      ],
+    },
+    {
+      id: 'chain-of-reliance',
+      title: 'Secure the whole chain of reliance',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'Cross-border verification inherits risks from issuers, intermediaries, devices and relying institutions. A compromised signing key, fraudulent enrolment or poorly controlled broker can undermine confidence beyond the original organisation. Participants therefore need a minimum security baseline, independent assessment, incident notification and the ability to suspend unsafe connections. Assurance must cover the complete service, including suppliers and operational dependencies.',
+        },
+        {
+          k: 'p',
+          text:
+            'Federated verification and user-held credentials can reduce unnecessary centralisation, but neither guarantees privacy or resilience. A broker may accumulate revealing authentication metadata, while a wallet may be vulnerable through the user’s device or recovery process. Designs should minimise disclosed attributes, limit retention and avoid persistent identifiers that enable tracking across unrelated services. Any intermediary should be assessed for what it sees, stores, and can infer.',
+        },
+        {
+          k: 'p',
+          text:
+            'Revocation and recovery deserve equal attention to initial verification. Participants must be able to respond when credentials are lost, compromised, or withdrawn, and to communicate relevant status changes reliably. Services also need tested procedures for outages, interrupted connectivity, and compromised issuers. **An apparently secure design that leaves legitimate users stranded during a disruption has not met its purpose.**',
+        },
+      ],
+    },
+    {
+      id: 'inclusion-accountability',
+      title: 'Make inclusion and accountability conditions of participation',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'The people who could benefit most may lack current documents, smartphones, reliable connectivity or the ability to navigate complex appeals. Verification should therefore include proportionate alternatives and assisted channels appropriate to the service and applicable law. Essential rights and services should not depend on possessing a credential designed for border control. Providers should measure rejection, abandonment and recovery alongside speed, cost and fraud.',
+        },
+        {
+          k: 'p',
+          text:
+            'Purpose limits must be enforceable. Information collected to help someone access a service should not quietly become a resource for unrelated surveillance. Proposed data sharing needs a lawful basis, defined recipients, necessary attributes and clear retention rules. Where consent is relied upon, it must be meaningful; it cannot substitute for safeguards or cure an otherwise unlawful use. People need understandable notice and accessible routes to correction and review.',
+        },
+        {
+          k: 'p',
+          text:
+            'Liability must be agreed before institutions rely on one another’s assertions. The issuer, intermediary and receiving institution should know their duties when information is inaccurate or a control fails. Oversight should be able to inspect evidence, investigate complaints and require corrective action. A verified identity must never be treated as proof of wrongdoing, and any adverse vetting result requires an appropriate process for challenge.',
+        },
+      ],
+    },
+    {
+      id: 'accountable-practice',
+      title: 'Turn interoperability into accountable practice',
+      blocks: [
+        {
+          k: 'p',
+          text:
+            'The first implementation decisions should concern purpose, partners and authority. Select a small number of services, map the legal and regulatory requirements, and agree which institution is authoritative for each attribute. Then define assurance equivalence, data-sharing limits, liability, security requirements and recovery arrangements. **Technical architecture should implement these decisions, rather than determine them by default.**',
+        },
+        {
+          k: 'p',
+          text:
+            'Identity authorities, central banks, financial intelligence units, data-protection regulators, immigration bodies, justice institutions, service providers and civil society all have relevant responsibilities. Their involvement should follow the chosen use case, with named owners for unresolved questions. Pilot results should report benefits and failures honestly, including who remains excluded and whether corrective measures work. Expansion should depend on those results and continued compliance with participation requirements.',
+        },
+        {
+          k: 'p',
+          text:
+            'The Digital Trust Futures Foundation can contribute through independent assurance, cross-sector dialogue and open evaluation methods. Its role should be to test security and trust claims, make evidence usable to decision-makers, and help institutions address identified gaps. Published conflict policies, transparent methods, and separation from commercial interests are essential to that role. Cross-border identity becomes valuable when people can use it safely, institutions can justify their reliance, and failures can be corrected without stripping people of access or dignity.',
+        },
+      ],
+    },
+    {
+      id: 'references',
+      title: 'Selected references',
+      blocks: [
+        {
+          k: 'ul',
+          items: [
+            'FATF — Guidance on Digital Identity (2020).',
+            'UNCITRAL — Model Law on the Use and Cross-border Recognition of Identity Management and Trust Services (2022).',
+            'ICAO — Doc 9303, Machine Readable Travel Documents.',
+            'World Health Organization — Global Digital Health Certification Network.',
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 /* ── Registry ───────────────────────────────────────────────────────────── */
 
-export const INSIGHTS: Insight[] = [ARTICLE_1, ARTICLE_2, ARTICLE_3, ARTICLE_4];
+export const INSIGHTS: Insight[] = [ARTICLE_1, ARTICLE_2, ARTICLE_3, ARTICLE_4, PERSPECTIVE_1];
+
+export const isSeries = (a: Insight) => a.kind !== 'perspective';
+
+/** The numbered series, in order — drives the rail and prev/next navigation. */
+export const SERIES_ARTICLES: Insight[] = INSIGHTS.filter(isSeries);
 
 export const INSIGHT_BY_SLUG: Record<string, Insight> = Object.fromEntries(
   INSIGHTS.map((a) => [a.slug, a]),

@@ -5,7 +5,8 @@ import { Breadcrumb, CtaBand } from '../components/ui/PageHero';
 import { ArrowIcon, Icon } from '../components/ui/Icon';
 import { SITE, ORG, ORG_LEGAL, EMAIL } from '../data/siteConfig';
 import {
-  AUTHOR, INSIGHTS, INSIGHT_BY_SLUG, SERIES_LENGTH, SERIES_NAME, SERIES_SUB,
+  AUTHOR, INSIGHT_BY_SLUG, PERSPECTIVE_LABEL, SERIES_ARTICLES,
+  SERIES_LENGTH, SERIES_NAME, SERIES_SUB, isSeries,
   readingMinutes, type Block, type Insight,
 } from '../data/insights';
 
@@ -148,9 +149,11 @@ export default function InsightArticle() {
 
   if (!article) return <Navigate to="/404" replace />;
 
-  const idx = INSIGHTS.findIndex((a) => a.slug === article.slug);
-  const prev = idx > 0 ? INSIGHTS[idx - 1] : null;
-  const next = idx < INSIGHTS.length - 1 ? INSIGHTS[idx + 1] : null;
+  const series = isSeries(article);
+  const idx = SERIES_ARTICLES.findIndex((a) => a.slug === article.slug);
+  const prev = series && idx > 0 ? SERIES_ARTICLES[idx - 1] : null;
+  const next = series && idx >= 0 && idx < SERIES_ARTICLES.length - 1
+    ? SERIES_ARTICLES[idx + 1] : null;
   const minutes = readingMinutes(article);
   const url = `${SITE}/research/${article.slug}`;
 
@@ -173,8 +176,12 @@ export default function InsightArticle() {
           keywords: article.tags.join(', '),
           author: { '@type': 'Person', name: AUTHOR.name, jobTitle: AUTHOR.role, affiliation: { '@type': 'NGO', name: ORG } },
           publisher: { '@type': 'NGO', name: ORG, legalName: ORG_LEGAL, url: `${SITE}/` },
-          isPartOf: { '@type': 'PublicationIssue', name: SERIES_NAME, description: SERIES_SUB },
-          position: article.number,
+          ...(series
+            ? {
+                isPartOf: { '@type': 'PublicationIssue', name: SERIES_NAME, description: SERIES_SUB },
+                position: article.number,
+              }
+            : {}),
         }}
       />
 
@@ -188,11 +195,13 @@ export default function InsightArticle() {
             items={[
               { label: 'Home', href: '/' },
               { label: 'Research', href: '/research' },
-              { label: `Article ${article.number}` },
+              { label: series ? `Article ${article.number}` : 'Perspective' },
             ]}
           />
           <p className="eyebrow eyebrow--teal">
-            {SERIES_NAME} · Article {article.number} of {SERIES_LENGTH}
+            {series
+              ? `${SERIES_NAME} · Article ${article.number} of ${SERIES_LENGTH}`
+              : PERSPECTIVE_LABEL}
           </p>
           <h1 className="balance">{article.title}</h1>
           <p className="lede pretty">{article.subtitle}</p>
@@ -201,7 +210,7 @@ export default function InsightArticle() {
             <span><strong>{AUTHOR.name}</strong>, {AUTHOR.role}</span>
             <span><time dateTime={article.published}>{article.publishedLabel}</time></span>
             <span>{minutes} min read</span>
-            <span>{article.version}</span>
+            {article.version && <span>{article.version}</span>}
             <span>Classification: {article.classification}</span>
           </div>
 
@@ -233,18 +242,18 @@ export default function InsightArticle() {
                 ))}
               </nav>
               <div className="paper-rail__foot">
-                <p className="mono-label">In this series</p>
+                <p className="mono-label">{series ? 'In this series' : 'Related series'}</p>
                 <ol className="paper-series">
-                  {INSIGHTS.map((a) => (
+                  {SERIES_ARTICLES.map((a) => (
                     <li key={a.slug} aria-current={a.slug === article.slug ? 'true' : undefined}>
                       {a.slug === article.slug
                         ? <span>{a.number}. {a.title}</span>
                         : <Link to={`/research/${a.slug}`}>{a.number}. {a.title}</Link>}
                     </li>
                   ))}
-                  {Array.from({ length: SERIES_LENGTH - INSIGHTS.length }, (_, i) => (
+                  {Array.from({ length: SERIES_LENGTH - SERIES_ARTICLES.length }, (_, i) => (
                     <li key={`todo-${i}`} className="is-upcoming">
-                      <span>{INSIGHTS.length + i + 1}. Forthcoming</span>
+                      <span>{SERIES_ARTICLES.length + i + 1}. Forthcoming</span>
                     </li>
                   ))}
                 </ol>
@@ -283,7 +292,10 @@ export default function InsightArticle() {
                 <p>
                   <code>
                     Kutumela, G. ({article.published.slice(0, 4)}). {article.title}: {article.subtitle}.{' '}
-                    {SERIES_NAME}, article {article.number} of {SERIES_LENGTH}. {ORG_LEGAL}. Available at {url}
+                    {series
+                      ? `${SERIES_NAME}, article ${article.number} of ${SERIES_LENGTH}. `
+                      : `${PERSPECTIVE_LABEL}. `}
+                    {ORG_LEGAL}. Available at {url}
                   </code>
                 </p>
               </div>
@@ -331,7 +343,7 @@ export default function InsightArticle() {
 
       <section className="section">
         <div className="container">
-          <div className="series-nav" data-reveal="">
+          <div className={`series-nav${series ? '' : ' series-nav--single'}`} data-reveal="">
             <div>{prev && <SeriesCard a={prev} label="← Previous in series" />}</div>
             <div className="series-nav__centre">
               <Link className="series-card series-card--centre" to="/research#insights">

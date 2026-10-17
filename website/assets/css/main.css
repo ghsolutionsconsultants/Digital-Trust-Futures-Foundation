@@ -1431,3 +1431,12 @@ a[href^="mailto:"]{overflow-wrap:anywhere}
 /* A citation carries a full URL, which is one unbreakable token wide enough to
    push the page sideways on a phone. Same treatment as mailto links above. */
 .cite-block code{overflow-wrap:anywhere}
+
+/* A perspective piece has no previous or next, so the three-up series nav
+   collapses to the one link that is actually useful. */
+@media (min-width:860px){
+  .series-nav--single{grid-template-columns:1fr}
+  .series-nav--single .series-nav__centre{border-inline:0;padding-inline:0}
+  .series-nav--single > :first-child,
+  .series-nav--single .series-nav__end{display:none}
+}

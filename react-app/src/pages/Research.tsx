@@ -3,7 +3,8 @@ import { SeoHead } from '../components/ui/SeoHead';
 import { PageHero, CtaBand } from '../components/ui/PageHero';
 import { ArrowIcon, Icon } from '../components/ui/Icon';
 import {
-  INSIGHTS, SERIES_LENGTH, SERIES_NAME, SERIES_SUB, readingMinutes,
+  INSIGHTS, PERSPECTIVE_LABEL, SERIES_ARTICLES, SERIES_LENGTH, SERIES_NAME,
+  SERIES_SUB, isSeries, readingMinutes,
 } from '../data/insights';
 
 interface Resource {
@@ -18,6 +19,7 @@ const RESOURCES: Resource[] = [
   { title: 'The Cost of Illusory Sovereignty', rtype: 'Policy paper', tags: 'dpi policy opensource citizen identity', desc: 'Article 2 of the Digital Sovereignty in Practice series. Why false control becomes a material national risk across economic dependency, population-scale PII exposure, citizen trust and shared digital public goods ecosystems.', status: 'live', div: 'Policy and Evidence Centre', href: '/research/the-cost-of-illusory-sovereignty' },
   { title: 'Cyberwar Makes Sovereignty Non-Negotiable', rtype: 'Policy paper', tags: 'dpi policy ai opensource citizen', desc: 'Article 3 of the Digital Sovereignty in Practice series. Why DPI now sits inside an active, contested threat environment — persistent intrusion rather than episodic incidents, AI as an attacker force multiplier, and the Global South defence gap — with a reference list of the governing instruments.', status: 'live', div: 'Policy and Evidence Centre', href: '/research/cyberwar-makes-sovereignty-non-negotiable' },
   { title: 'Sovereignty by Design', rtype: 'Policy paper', tags: 'dpi policy identity payments opensource', desc: 'Article 4 of the Digital Sovereignty in Practice series. A six-layer architecture for sovereignty-aware DPI — governance, trust, data protection, platform security, operations and ecosystem — with a phased 36-month roadmap and a model for regional shared capability without surrendered accountability.', status: 'live', div: 'Policy and Evidence Centre', href: '/research/sovereignty-by-design' },
+  { title: 'Making Digital Identity Work Across Borders', rtype: 'Perspective', tags: 'identity dpi policy citizen rights', desc: 'A Foundation perspective on cross-border digital identity: why a working interface is not permission to rely on a foreign credential, how to start from a few useful services, and what has to be settled — assurance equivalence, liability, inclusion and recourse — before live reliance begins.', status: 'live', div: 'DPI Trust Lab', href: '/research/making-digital-identity-work-across-borders' },
   { title: 'DPI Security Assurance Framework and maturity model', rtype: 'Framework', tags: 'dpi ai identity payments', desc: "The Foundation's core assurance method: a maturity model and structured review approach for citizen-facing digital public infrastructure.", status: 'development', div: 'Assurance Lab' },
   { title: 'DPI Trust Assessment Toolkit', rtype: 'Toolkit', tags: 'dpi identity payments', desc: 'A practical toolkit for conducting a DPI trust readiness assessment, including scoping, evidence requests, interview guides and scoring.', status: 'development', div: 'DPI Trust Lab' },
   { title: 'Open-Source Project Security Baseline', rtype: 'Baseline', tags: 'opensource', desc: 'A minimum security baseline for public-interest open-source projects: repository hardening, release integrity, dependency handling and disclosure readiness.', status: 'development', div: 'Open Digital Commons' },
@@ -79,17 +81,20 @@ export default function Research() {
         <div className="container">
           <div className="section-head section-head--wide" data-reveal="">
             <p className="eyebrow eyebrow--teal">Insight papers</p>
-            <h2 className="balance">{SERIES_NAME}</h2>
+            <h2 className="balance">{SERIES_NAME}, and other perspectives</h2>
             <p style={{ maxWidth: '66ch' }}>
-              {SERIES_SUB}. {INSIGHTS.length} of {SERIES_LENGTH} articles are published and readable in
-              full on this site; the remainder follow through the year.
+              {SERIES_SUB}. {SERIES_ARTICLES.length} of {SERIES_LENGTH} articles are published and
+              readable in full on this site, alongside standalone Foundation perspectives on related
+              questions. Every piece is a web page first; a formatted PDF is offered on each one.
             </p>
           </div>
 
           <div className="insight-grid" data-reveal="">
             {INSIGHTS.map((a) => (
               <article key={a.slug} className="insight-card">
-                <p className="insight-card__num">Article {a.number} of {SERIES_LENGTH}</p>
+                <p className="insight-card__num">
+                  {isSeries(a) ? `Article ${a.number} of ${SERIES_LENGTH}` : PERSPECTIVE_LABEL}
+                </p>
                 <h3 className="insight-card__title">
                   <Link className="stretched" to={`/research/${a.slug}`}>{a.title}</Link>
                 </h3>

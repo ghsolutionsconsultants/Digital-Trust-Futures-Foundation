@@ -30,6 +30,28 @@ def cover(width, *, article_no, title, subtitle, why_title, why_body, dateline):
     ]
 
 
+def perspective_cover(width, *, title, subtitle, why_title, why_body, dateline):
+    """Cover for a standalone perspective piece.
+
+    Same furniture as a series cover, but the kicker names the format rather
+    than the series, and there is no "Article n of 6" eyebrow — these pieces
+    are not numbered and do not carry a series bridge.
+    """
+    logo = Image(LOGO, width=52 * mm, height=52 * mm * (466 / 969))
+    logo.hAlign = "LEFT"
+    return [
+        Spacer(1, 4 * mm), logo, Spacer(1, 12 * mm),
+        Paragraph("DTFF PERSPECTIVE", S["cover_kicker"]),
+        Paragraph(title, S["cover_title"]),
+        Paragraph(subtitle, S["cover_sub"]),
+        brand_bar(width), Spacer(1, 9 * mm),
+        callout(why_title, why_body, width),
+        Spring(reserve=34),
+        Paragraph(f"Prepared by Godfrey Kutumela, {ORG}", S["byline"]),
+        Paragraph(dateline, S["meta"]),
+    ]
+
+
 AUTHOR_BULLETS = [
     "Trusted advisor to governments, foundations and ecosystem builders delivering secure-by-design DPI across Africa, Latin America and global markets.",
     "Core contributor to large-scale platforms including Mowali (mobile money interoperability infrastructure), Mojaloop (interoperable faster payments), MOSIP (digital identity) and Tazama (fraud systems).",

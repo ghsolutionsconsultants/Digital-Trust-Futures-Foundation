@@ -44,6 +44,7 @@ const ROUTES = ['/','/about','/human-rights','/civil-society','/children-young-p
   '/news','/contact','/security','/credits','/divisions/dpi-trust-lab','/divisions/skills-academy',
   '/research/digital-sovereignty-starts-with-control','/research/the-cost-of-illusory-sovereignty',
   '/research/cyberwar-makes-sovereignty-non-negotiable','/research/sovereignty-by-design',
+  '/research/making-digital-identity-work-across-borders',
   '/legal/privacy','/legal/cookies','/legal/terms','/legal/safeguarding','/thank-you'];
 
 const results = [];
@@ -195,7 +196,7 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
       pdf: c.querySelector('.insight-card__pdf')?.getAttribute('href'),
     })));
     check('research page links to every published article',
-      cards.length === 4 && cards.every(c => c.read?.startsWith('/research/')),
+      cards.length === 5 && cards.every(c => c.read?.startsWith('/research/')),
       cards.map(c => c.read).join(' '));
 
     const pdfs = await Promise.all(cards.map(c => c.pdf ? fetch(B + c.pdf).then(r => r.status) : 0));
