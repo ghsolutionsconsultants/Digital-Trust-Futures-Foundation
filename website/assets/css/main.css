@@ -1440,3 +1440,24 @@ a[href^="mailto:"]{overflow-wrap:anywhere}
   .series-nav--single > :first-child,
   .series-nav--single .series-nav__end{display:none}
 }
+
+/* Figures and key-figure strips in long-form papers ---------------------- */
+/* The source diagrams are drawn on white, so they sit on a white card in both
+   themes rather than being inverted or blended into a dark page. */
+.paper-figure{margin:var(--sp-7) 0}
+.paper-figure a{display:block;border-radius:var(--radius-l);overflow:hidden;
+  background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-1);
+  transition:box-shadow .18s var(--ease),border-color .18s var(--ease)}
+.paper-figure a:hover{box-shadow:var(--shadow-2);border-color:var(--border-2)}
+.paper-figure img{display:block;width:100%;height:auto}
+.paper-figure figcaption{margin-top:.7rem;font-size:var(--step--1);line-height:1.55;
+  color:var(--text-3)}
+
+.paper-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));
+  gap:1px;margin:var(--sp-6) 0;background:var(--border);border:1px solid var(--border);
+  border-top:3px solid var(--accent);border-radius:var(--radius);overflow:hidden}
+.paper-stats > div{background:var(--surface-2);padding:1rem 1.1rem}
+.paper-stats dt{font-family:var(--font-display);font-size:var(--step-2);font-weight:500;
+  line-height:1.15;color:var(--heading);letter-spacing:-.01em}
+.paper-stats dd{margin:.4rem 0 0;font-size:var(--step--2);line-height:1.5;color:var(--text-2)}
+.paper-section > .paper-figure,.paper-section > .paper-stats{margin-block:var(--sp-6)}

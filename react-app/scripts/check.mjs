@@ -44,7 +44,7 @@ const ROUTES = ['/','/about','/human-rights','/civil-society','/children-young-p
   '/news','/contact','/security','/credits','/divisions/dpi-trust-lab','/divisions/skills-academy',
   '/research/digital-sovereignty-starts-with-control','/research/the-cost-of-illusory-sovereignty',
   '/research/cyberwar-makes-sovereignty-non-negotiable','/research/sovereignty-by-design',
-  '/research/making-digital-identity-work-across-borders',
+  '/research/making-digital-identity-work-across-borders','/research/the-localisation-trap',
   '/legal/privacy','/legal/cookies','/legal/terms','/legal/safeguarding','/thank-you'];
 
 const results = [];
@@ -78,18 +78,39 @@ for (const route of ROUTES) {
     return {
       mounted: !!document.querySelector('#root > *'),
       h1s: document.querySelectorAll('h1').length,
-      stillFaded: [...document.querySelectorAll('[data-reveal],[data-reveal-stagger],[data-reveal-stagger] > *')].filter(faded).length,
+      stillFaded: [...document.querySelectorAll('[data-reveal],[data-reveal-stagger],[data-reveal-stagger] > *')].filter(faded)
+        .map(el => `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}.${String(el.className).split(' ')[0]}`),
     };
   });
 
   if (!s.mounted) deadRoutes++;
-  if (s.stillFaded) fadedRoutes++;
+  if (s.stillFaded.length) { fadedRoutes++; console.error(`  ${route}: still faded — ${s.stillFaded.join(', ')}`); }
   if (errs.length) { errorRoutes++; console.error(`  ${route}: ${errs.slice(0,2).join(' | ')}`); }
   await page.close();
 }
 check(`all ${ROUTES.length} routes mount`, deadRoutes === 0, `${deadRoutes} dead`);
 check('no content left invisible after scrolling', fadedRoutes === 0, `${fadedRoutes} route(s) affected`);
 check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRoutes} route(s) affected`);
+
+// ── grid lists hold exactly one content item per row ─────────────────────────
+// .dot-list, .num-list and .check-list lay each <li> out as a grid of marker
+// plus text. Inline markup sitting directly in the <li> (a bold lead, a link)
+// becomes a second grid item and the line breaks apart.
+{
+  const page = await browser.newPage();
+  const broken = [];
+  for (const route of ROUTES) {
+    await page.goto(B + route, { waitUntil: 'networkidle0' });
+    const bad = await page.evaluate(() =>
+      [...document.querySelectorAll('.dot-list > li, .num-list > li, .check-list > li')]
+        .filter(li => getComputedStyle(li).display === 'grid')
+        .filter(li => [...li.childNodes].filter(n => n.nodeType === 1 || n.textContent.trim()).length > 1)
+        .map(li => li.textContent.trim().slice(0, 40)));
+    if (bad.length) broken.push(`${route} (${bad.length}): "${bad[0]}…"`);
+  }
+  check('list items keep marker and text on one row', broken.length === 0, broken.join('; '));
+  await page.close();
+}
 
 // ── metadata is per-route and not duplicated ─────────────────────────────────
 {
@@ -196,7 +217,7 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
       pdf: c.querySelector('.insight-card__pdf')?.getAttribute('href'),
     })));
     check('research page links to every published article',
-      cards.length === 5 && cards.every(c => c.read?.startsWith('/research/')),
+      cards.length === 6 && cards.every(c => c.read?.startsWith('/research/')),
       cards.map(c => c.read).join(' '));
 
     const pdfs = await Promise.all(cards.map(c => c.pdf ? fetch(B + c.pdf).then(r => r.status) : 0));
@@ -215,6 +236,26 @@ check('no JavaScript errors or failed requests', errorRoutes === 0, `${errorRout
     check('article 3 renders its grouped reference list',
       !!refs && refs.groups === 7 && refs.entries > 55,
       refs ? `${refs.groups} groups, ${refs.entries} entries` : 'section missing');
+  }
+
+  // Article 5 carries figures and a key-figures strip, which nothing else does.
+  {
+    await page.goto(B + '/research/the-localisation-trap', { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 700));
+    const figs = await page.evaluate(async () => {
+      const imgs = [...document.querySelectorAll('.paper-figure img')];
+      imgs.forEach(i => i.loading = 'eager');
+      await Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+      return { count: imgs.length, loaded: imgs.filter(i => i.naturalWidth > 0).length,
+               alts: imgs.filter(i => i.alt.length > 20).length,
+               stats: document.querySelectorAll('.paper-stats > div').length };
+    });
+    const unsized = await page.evaluate(() =>
+      [...document.querySelectorAll('main img')].filter(i => !i.getAttribute('width') || !i.getAttribute('height')).map(i => i.getAttribute('src')));
+    check('every content image reserves its space before loading', unsized.length === 0, unsized.join(', '));
+    check('article 5 renders all eight figures, loaded and described',
+      figs.count === 8 && figs.loaded === 8 && figs.alts === 8 && figs.stats === 4,
+      `${figs.loaded}/${figs.count} loaded, ${figs.alts} with alt text, ${figs.stats} key figures`);
   }
 
   // Legacy .html URLs from the previous static site — the email signature uses these.

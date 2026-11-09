@@ -30,13 +30,13 @@ export default function Contact() {
               <div className="mt-8 flow">
                 <h3>Common enquiries</h3>
                 <ul className="check-list mt-4">
-                  <li><strong>Government partners and DPI teams</strong> — use the <Link to="/get-involved#partner">Get involved</Link> form which routes to the programme team.</li>
-                  <li><strong>Funders and development partners</strong> — see the <Link to="/support-our-work">investment package</Link> first, then write directly.</li>
-                  <li><strong>DPG and open-source maintainers</strong> — use the <Link to="/get-involved#support">support request form</Link>.</li>
-                  <li><strong>Civil-society organisations</strong> — see the <Link to="/get-involved#helpdesk">helpdesk pathway</Link>.</li>
-                  <li><strong>Researchers and fellows</strong> — see <Link to="/get-involved#careers">Careers and fellowships</Link>.</li>
-                  <li><strong>Security disclosures</strong> — please follow the <Link to="/security">vulnerability disclosure policy</Link>.</li>
-                  <li><strong>Media enquiries</strong> — write directly to the address above with "Media" in the subject line.</li>
+                  <li><div><strong>Government partners and DPI teams</strong> — use the <Link to="/get-involved#partner">Get involved</Link> form which routes to the programme team.</div></li>
+                  <li><div><strong>Funders and development partners</strong> — see the <Link to="/support-our-work">investment package</Link> first, then write directly.</div></li>
+                  <li><div><strong>DPG and open-source maintainers</strong> — use the <Link to="/get-involved#support">support request form</Link>.</div></li>
+                  <li><div><strong>Civil-society organisations</strong> — see the <Link to="/get-involved#helpdesk">helpdesk pathway</Link>.</div></li>
+                  <li><div><strong>Researchers and fellows</strong> — see <Link to="/get-involved#careers">Careers and fellowships</Link>.</div></li>
+                  <li><div><strong>Security disclosures</strong> — please follow the <Link to="/security">vulnerability disclosure policy</Link>.</div></li>
+                  <li><div><strong>Media enquiries</strong> — write directly to the address above with "Media" in the subject line.</div></li>
                 </ul>
               </div>
             </div>
@@ -53,7 +53,7 @@ export default function Contact() {
                 <ul className="dot-list mt-4">
                   <li>General enquiries: within five working days.</li>
                   <li>Funding and partnership requests: within ten working days.</li>
-                  <li>Security disclosures: within three working days (see <Link to="/security">disclosure policy</Link>).</li>
+                  <li><div>Security disclosures: within three working days (see <Link to="/security">disclosure policy</Link>).</div></li>
                   <li>Civil society and DPG helpdesk: within five working days.</li>
                 </ul>
               </div>

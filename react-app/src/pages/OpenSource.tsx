@@ -147,11 +147,11 @@ export default function OpenSource() {
             </div>
             <div data-reveal="">
               <ul className="check-list">
-                <li><strong>Maintainers:</strong> request a security baseline review, SBOM support or a disclosure process.</li>
-                <li><strong>Contributors:</strong> each hosted project publishes its own contribution guide, code of conduct and review process in its repository.</li>
-                <li><strong>Governments:</strong> tell us which open-source components your national systems depend on, so shared exposure can be assessed once rather than repeatedly.</li>
-                <li><strong>Funders:</strong> the Open-Source Maintainer Security Fund exists precisely because maintenance is chronically underfunded.</li>
-                <li><strong>Researchers:</strong> replication requests and methodological challenge are welcome.</li>
+                <li><div><strong>Maintainers:</strong> request a security baseline review, SBOM support or a disclosure process.</div></li>
+                <li><div><strong>Contributors:</strong> each hosted project publishes its own contribution guide, code of conduct and review process in its repository.</div></li>
+                <li><div><strong>Governments:</strong> tell us which open-source components your national systems depend on, so shared exposure can be assessed once rather than repeatedly.</div></li>
+                <li><div><strong>Funders:</strong> the Open-Source Maintainer Security Fund exists precisely because maintenance is chronically underfunded.</div></li>
+                <li><div><strong>Researchers:</strong> replication requests and methodological challenge are welcome.</div></li>
               </ul>
             </div>
           </div>

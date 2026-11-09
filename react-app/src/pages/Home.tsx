@@ -222,9 +222,9 @@ export default function Home() {
               <div className="callout">
                 <h3>Three formal civil-society roles</h3>
                 <ul className="dot-list mt-4" style={{ paddingLeft: 0, margin: '1rem 0 0' }}>
-                  <li><strong>Beneficiary</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Cyber helpdesk, threat modelling, secure communications, incident referral and organisational resilience.</span></li>
-                  <li><strong>Evidence partner</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Local partners surface anonymised harm patterns that commercial assessments miss.</span></li>
-                  <li><strong>Accountability participant</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Civil society shapes DPI consultations, toolkit testing and methodology review.</span></li>
+                  <li><div><strong>Beneficiary</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Cyber helpdesk, threat modelling, secure communications, incident referral and organisational resilience.</span></div></li>
+                  <li><div><strong>Evidence partner</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Local partners surface anonymised harm patterns that commercial assessments miss.</span></div></li>
+                  <li><div><strong>Accountability participant</strong><br /><span style={{ color: 'var(--text-2)', fontSize: '0.9em' }}>Civil society shapes DPI consultations, toolkit testing and methodology review.</span></div></li>
                 </ul>
               </div>
             </div>

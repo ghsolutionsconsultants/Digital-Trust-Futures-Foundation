@@ -25,6 +25,8 @@ final file. Contents entries can therefore never drift from the body.
 | `common.py` | Cover, author note, Foundation note, contents table |
 | `refs.py` | The shared reference list, generated from `insights.ts` |
 | `article4.py` | Article 4 |
+| `article5.py` | Article 5 — also generates its web version (see below) |
+| `perspective_cross_border_identity.py` | DTFF perspective on cross-border identity |
 
 ## Why `fonts.py` exists
 
@@ -36,7 +38,24 @@ them into a single face. An earlier build shipped with no bold anywhere in it
 for exactly that reason, so `fonts.py` asserts the names are distinct before it
 finishes.
 
-## Keeping the PDF and the web article in step
+## Single-source articles (article 5 onward)
+
+`article5.py` holds its content once, as structured blocks in the same schema
+as `insights.ts`. It renders the PDF from them, and
+
+```bash
+python3 _src/papers/article5.py --web
+```
+
+prints the TypeScript for the web article, which is pasted into `insights.ts`
+between its generated-block markers. Edit the Python, never the generated
+TypeScript. Figures live once in `react-app/public/assets/papers/figures/` and
+both formats draw from there; the web export records each figure's pixel size
+so the browser reserves its space before the image loads.
+
+New articles should follow this pattern rather than the older two-copy one.
+
+## Keeping the PDF and the web article in step (articles 1–4)
 
 An article's text lives twice: here for the PDF, and in
 `react-app/src/data/insights.ts` for the web page. `refs.py` is generated from

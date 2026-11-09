@@ -18,7 +18,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (BaseDocTemplate, Frame, PageTemplate, Paragraph,
                                 Spacer, Table, TableStyle, Image, ListFlowable,
-                                ListItem, PageBreak, Flowable)
+                                ListItem, PageBreak, Flowable, KeepTogether)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.environ.get("DTFF_REPO", os.path.abspath(os.path.join(HERE, "..", "..")))
@@ -112,6 +112,12 @@ S["byline"] = ParagraphStyle("byline", fontName="Body-Semi", fontSize=10, leadin
                              textColor=NAVY_DEEP, spaceAfter=2)
 S["contact"] = ParagraphStyle("contact", fontName="Body", fontSize=8.6, leading=13,
                               textColor=MUTED, spaceAfter=3)
+S["caption"] = ParagraphStyle("caption", fontName="Body", fontSize=8.2, leading=12,
+                              textColor=MUTED, spaceBefore=5, spaceAfter=12)
+S["stat_v"] = ParagraphStyle("stat_v", fontName="Display-Bold", fontSize=15, leading=18,
+                             textColor=NAVY_DEEP, spaceAfter=3)
+S["stat_l"] = ParagraphStyle("stat_l", fontName="Body", fontSize=7.9, leading=11.2,
+                             textColor=INK_2)
 S["toc"] = ParagraphStyle("toc", fontName="Body", fontSize=9.4, leading=17,
                           textColor=INK_2)
 
@@ -296,6 +302,84 @@ class Paper(BaseDocTemplate):
         canvas.drawString(MARGIN, y, self.meta.get("classification", "Public"))
         canvas.drawCentredString(PAGE_W / 2, y, ORG)
         canvas.drawRightString(PAGE_W - MARGIN, y, f"Page {canvas.getPageNumber()}")
+
+
+class Figure(Flowable):
+    """A bordered full-width image with its caption, drawn as one unit.
+
+    An atomic figure that misses the space left on a page jumps whole to the
+    next one and strands a half-empty page behind it. This one shrinks to fit
+    the space available, down to `min_scale` of its natural size; only below
+    that does it defer to the next page.
+    """
+    PAD = 4
+
+    def __init__(self, path, caption, width, max_h=None, min_scale=0.62):
+        Flowable.__init__(self)
+        from reportlab.lib.utils import ImageReader
+        self.path = path
+        self.frame_w = width
+        iw, ih = ImageReader(path).getSize()
+        self.ratio = ih / iw
+        nat_h = (width - 2 * self.PAD) * self.ratio
+        self.nat_img_h = min(nat_h, max_h) if max_h else nat_h
+        self.min_scale = min_scale
+        self.cap = Paragraph(caption, S["caption"])
+        self.img_h = self.nat_img_h
+
+    def _cap_h(self, w):
+        _, h = self.cap.wrap(w, 1000)
+        return h + S["caption"].spaceBefore + S["caption"].spaceAfter
+
+    def wrap(self, availW, availH):
+        cap_h = self._cap_h(self.frame_w)
+        room = availH - cap_h - 2 * self.PAD
+        if self.nat_img_h <= room:
+            self.img_h = self.nat_img_h
+        elif room >= self.nat_img_h * self.min_scale:
+            self.img_h = room
+        else:
+            self.img_h = self.nat_img_h        # too tight: let the frame move it on
+        self.width = self.frame_w
+        self.height = self.img_h + 2 * self.PAD + cap_h
+        return self.width, self.height
+
+    def draw(self):
+        c = self.canv
+        cap_h = self._cap_h(self.frame_w)
+        box_h = self.img_h + 2 * self.PAD
+        c.saveState()
+        c.setStrokeColor(RULE)
+        c.setLineWidth(0.4)
+        c.rect(0, cap_h, self.frame_w, box_h, stroke=1, fill=0)
+        img_w = self.img_h / self.ratio
+        c.drawImage(self.path, (self.frame_w - img_w) / 2, cap_h + self.PAD,
+                    width=img_w, height=self.img_h, mask="auto")
+        c.restoreState()
+        self.cap.wrap(self.frame_w, cap_h)
+        self.cap.drawOn(c, 0, S["caption"].spaceAfter)
+
+
+def figure(path, caption, width, max_h=None):
+    return Figure(path, caption, width, max_h=max_h)
+
+
+def stats_strip(items, width):
+    """A row of key figures: a short display-face value over a one-line label."""
+    n = len(items)
+    cells = [[Paragraph(v, S["stat_v"]), Paragraph(l, S["stat_l"])] for v, l in items]
+    t = Table([cells], colWidths=[width / n] * n)
+    style = [
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LINEABOVE", (0, 0), (-1, 0), 2, ORANGE),
+        ("BACKGROUND", (0, 0), (-1, -1), PAPER_2),
+        ("LEFTPADDING", (0, 0), (-1, -1), 9), ("RIGHTPADDING", (0, 0), (-1, -1), 9),
+        ("TOPPADDING", (0, 0), (-1, -1), 9), ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+    ]
+    for i in range(1, n):
+        style.append(("LINEBEFORE", (i, 0), (i, 0), 0.4, RULE))
+    t.setStyle(TableStyle(style))
+    return t
 
 
 def build(path, meta, story_fn):

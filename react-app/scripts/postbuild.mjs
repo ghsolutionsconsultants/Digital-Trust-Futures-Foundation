@@ -40,6 +40,7 @@ const ROUTES = [
   ['/research/the-cost-of-illusory-sovereignty', 'yearly', '0.8'],
   ['/research/cyberwar-makes-sovereignty-non-negotiable', 'yearly', '0.8'],
   ['/research/sovereignty-by-design', 'yearly', '0.8'],
+  ['/research/the-localisation-trap', 'yearly', '0.8'],
   ['/research/making-digital-identity-work-across-borders', 'yearly', '0.8'],
   ['/open-source', 'monthly', '0.7'],
   ['/civil-society', 'monthly', '0.9'],

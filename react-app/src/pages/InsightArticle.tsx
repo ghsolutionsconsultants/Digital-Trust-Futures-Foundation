@@ -32,13 +32,13 @@ function BlockView({ b }: { b: Block }) {
     case 'ul':
       return (
         <ul className="dot-list paper-list">
-          {b.items.map((t, i) => <li key={i}><Rich text={t} /></li>)}
+          {b.items.map((t, i) => <li key={i}><span><Rich text={t} /></span></li>)}
         </ul>
       );
     case 'ol':
       return (
         <ol className="num-list">
-          {b.items.map((t, i) => <li key={i}><Rich text={t} /></li>)}
+          {b.items.map((t, i) => <li key={i}><span><Rich text={t} /></span></li>)}
         </ol>
       );
     case 'quote':
@@ -49,6 +49,26 @@ function BlockView({ b }: { b: Block }) {
           <h3>{b.title}</h3>
           {b.paras.map((p, i) => <p key={i}><Rich text={p} /></p>)}
         </div>
+      );
+    case 'figure':
+      return (
+        <figure className="paper-figure">
+          <a href={b.src} target="_blank" rel="noopener noreferrer" aria-label="Open the full-size figure">
+            <img src={b.src} alt={b.alt} width={b.width} height={b.height} loading="lazy" decoding="async" />
+          </a>
+          <figcaption><Rich text={b.caption} /></figcaption>
+        </figure>
+      );
+    case 'stats':
+      return (
+        <dl className="paper-stats">
+          {b.items.map((i) => (
+            <div key={i.value}>
+              <dt>{i.value}</dt>
+              <dd>{i.label}</dd>
+            </div>
+          ))}
+        </dl>
       );
     case 'table':
       return (

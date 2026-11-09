@@ -198,10 +198,10 @@ export default function SupportOurWork() {
             <div className="callout" data-reveal=""><h3>Funding principles</h3><ul className="dot-list mt-4">{PRINCIPLES.map((p) => <li key={p}>{p}</li>)}</ul></div>
             <div className="callout callout--teal" data-reveal=""><h3>Indicative three-year mix</h3>
               <ul className="dot-list dot-list--teal mt-4" style={{ paddingLeft: 0 }}>
-                <li><strong>Founding or anchor grant</strong><br /><span style={{ color: 'var(--text-2)' }}>Establishes the Board, core team and Phase 1 divisions in Year 1; renewal or successor grant thereafter.</span></li>
-                <li><strong>Donor and DFI grants</strong><br /><span style={{ color: 'var(--text-2)' }}>One to two programme-specific grants in Year 1, diversifying to three to five across divisions in Years 2 and 3.</span></li>
-                <li><strong>Government contracts</strong><br /><span style={{ color: 'var(--text-2)' }}>Pilot country engagements first, then recurring national assessments.</span></li>
-                <li><strong>Training and fees</strong><br /><span style={{ color: 'var(--text-2)' }}>A pilot cohort first, then recurring Academy revenue.</span></li>
+                <li><div><strong>Founding or anchor grant</strong><br /><span style={{ color: 'var(--text-2)' }}>Establishes the Board, core team and Phase 1 divisions in Year 1; renewal or successor grant thereafter.</span></div></li>
+                <li><div><strong>Donor and DFI grants</strong><br /><span style={{ color: 'var(--text-2)' }}>One to two programme-specific grants in Year 1, diversifying to three to five across divisions in Years 2 and 3.</span></div></li>
+                <li><div><strong>Government contracts</strong><br /><span style={{ color: 'var(--text-2)' }}>Pilot country engagements first, then recurring national assessments.</span></div></li>
+                <li><div><strong>Training and fees</strong><br /><span style={{ color: 'var(--text-2)' }}>A pilot cohort first, then recurring Academy revenue.</span></div></li>
               </ul>
             </div>
           </div>
